@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  # backend:
+  #   build: ./backend
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - ./backend:/app
+  #   environment:
+  #     - NODE_ENV=development
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_PORT=4000
