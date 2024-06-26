@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "typescript": "^5.5.2"
+  },
+  "scripts": {
+    "start": "ts-node ./api_call.ts"
+  }
+}
