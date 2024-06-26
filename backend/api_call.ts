@@ -29,7 +29,7 @@ type SuccessfulResponse = {
     system_fingerprint: string;
 };
 
-async function callOpenAiApi(): Promise<SuccessfulResponse> {
+async function callOpenAiApi(user_input: string): Promise<SuccessfulResponse> {
   const api_key: string = process.env.API_KEY || '';
   const url: string = 'https://api.openai.com/v1/chat/completions';
 
@@ -43,7 +43,7 @@ async function callOpenAiApi(): Promise<SuccessfulResponse> {
         },
         {
           role: 'user',
-          content: 'it takes a number and returns that number times 25'
+          content: user_input
         }
       ],
       temperature: 0.7
@@ -68,10 +68,26 @@ async function callOpenAiApi(): Promise<SuccessfulResponse> {
   }
 }
 
+function parseMarkdown(api_output: string): string {
+    const js_pattern = /```javascript\n([^`]+)```/;
+    const match = api_output.match(js_pattern);
+
+    if (match && match[1]) {
+        return match[1];
+    } else {
+        console.log("No match found");
+        throw new Error('An unexpected error occurred');
+    }
+}
+
+
+
 async function main() {
     try {
-      const response = await callOpenAiApi();
-      console.log(response.choices[0].message.content);
+      const user_input: string = 'it takes a number and returns that number times 25';
+      const api_output = await callOpenAiApi(user_input);
+      const parsed_markdown = parseMarkdown(api_output.choices[0].message.content);
+      console.log(parsed_markdown);
     } catch (error) {
       console.error('An error occurred:', (error as Error).message);
     }
