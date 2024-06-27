@@ -69,7 +69,7 @@ async function callOpenAiApi(user_input: string): Promise<SuccessfulResponse> {
 }
 
 function parseMarkdown(api_output: string): string {
-    const js_pattern = /```javascript\n([^`]+)```/;
+    const js_pattern = /```javascript\n([\s\S]+?)```/;
     const match = api_output.match(js_pattern);
 
     if (match && match[1]) {
@@ -80,14 +80,27 @@ function parseMarkdown(api_output: string): string {
     }
 }
 
-
+function extractFunctionName(function_code: string): string {
+    const function_pattern = /function (\w+)\s*\(/;
+    const function_name = function_code.match(function_pattern);
+    return function_name ? function_name[1] : '';
+}
 
 async function main() {
     try {
-      const user_input: string = 'it takes a number and returns that number times 25';
+      const user_input: string = 'it takes in an array and returns the index where the number 7 is matched';
       const api_output = await callOpenAiApi(user_input);
-      const parsed_markdown = parseMarkdown(api_output.choices[0].message.content);
-      console.log(parsed_markdown);
+      const js_code_block = parseMarkdown(api_output.choices[0].message.content);
+      console.log(js_code_block);
+      const function_name = extractFunctionName(js_code_block);
+      const function_input = `
+      ${js_code_block}
+      return ${function_name};
+      `;
+
+      // May want to run later in a vm due to security concerns
+      const api_generated_func = new Function(function_input)();
+      console.log("The result from the api generated function is: ", api_generated_func([1, 3, 7]));
     } catch (error) {
       console.error('An error occurred:', (error as Error).message);
     }
