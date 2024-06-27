@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import '../../styles/login.css';
 
 export default function Signup() {
@@ -46,10 +47,18 @@ export default function Signup() {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const [message, setMessage] = useState(''); // Define the message state
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Handle form submission logic here, e.g., sending data to an API
-        console.log('Form Data:', formData);
+        //Endpoint here
+        try {
+            const response = await axios.post('http://localhost:4001/api/users/register', formData);
+            setMessage(response.data.message);
+        } catch (error) {
+            console.error('There was an error submitting the form!', error);
+            setMessage('Error creating user');
+        }
     };
 
     return (
@@ -113,6 +122,7 @@ export default function Signup() {
                 </div>
                 <button type="submit" className="signup-button">Sign Up</button>
             </form>
+            {message && <p>{message}</p>} {/* Display the message */}
         </div>
     );
 }

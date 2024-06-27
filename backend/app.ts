@@ -9,7 +9,7 @@ const port = process.env.PORT || 4001;
 app.use(bodyParser.json());
 
 // Use the user routes
-app.use('/api', usersRoutes);
+app.use('/api/users', usersRoutes);
 
 // Start the server
 app.listen(port, () => {
