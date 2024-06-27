@@ -86,12 +86,10 @@ function extractFunctionName(function_code: string): string {
     return function_name ? function_name[1] : '';
 }
 
-async function main() {
+async function llmFunctionGeneration(user_input: string): Promise<Function> {
     try {
-      const user_input: string = 'it takes in an array and returns the index where the number 7 is matched';
       const api_output = await callOpenAiApi(user_input);
       const js_code_block = parseMarkdown(api_output.choices[0].message.content);
-      console.log(js_code_block);
       const function_name = extractFunctionName(js_code_block);
       const function_input = `
       ${js_code_block}
@@ -99,12 +97,11 @@ async function main() {
       `;
 
       // May want to run later in a vm due to security concerns
-      const api_generated_func = new Function(function_input)();
-      console.log("The result from the api generated function is: ", api_generated_func([1, 3, 7]));
+      return new Function(function_input)();
     } catch (error) {
       console.error('An error occurred:', (error as Error).message);
+      throw new Error('An unexpected error occurred');
     }
 }
 
-// Call the API function
-main();
+export default llmFunctionGeneration;

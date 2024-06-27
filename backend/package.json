@@ -9,6 +9,6 @@
     "typescript": "^5.5.2"
   },
   "scripts": {
-    "start": "ts-node ./api_call.ts"
+    "start": "ts-node ./test.ts"
   }
 }
