@@ -29,7 +29,7 @@ type SuccessfulResponse = {
     system_fingerprint: string;
 };
 
-async function callOpenAiApi(user_input: string): Promise<SuccessfulResponse> {
+async function callOpenAiApi(user_input: string): Promise<string> {
   const api_key: string = process.env.API_KEY || '';
   const url: string = 'https://api.openai.com/v1/chat/completions';
 
@@ -55,14 +55,11 @@ async function callOpenAiApi(user_input: string): Promise<SuccessfulResponse> {
     });
 
     const data : SuccessfulResponse = response.data;
-    return data;
-    
+    return data.choices[0].message.content;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error('Error with the Axios request:', error.response?.data);
       throw new Error('Failed to call OpenAI API');
     } else {
-      console.error('Unexpected error:', error);
       throw new Error('An unexpected error occurred');
     }
   }
@@ -75,21 +72,25 @@ function parseMarkdown(api_output: string): string {
     if (match && match[1]) {
         return match[1];
     } else {
-        console.log("No match found");
-        throw new Error('An unexpected error occurred');
+        throw new Error('No javascript markdown block found');
     }
 }
 
 function extractFunctionName(function_code: string): string {
     const function_pattern = /function (\w+)\s*\(/;
     const function_name = function_code.match(function_pattern);
-    return function_name ? function_name[1] : '';
+
+    if (function_name && function_name[1]) {
+        return function_name[1];
+    } else {
+        throw new Error('No function name found');
+    }
 }
 
 async function llmFunctionGeneration(user_input: string): Promise<Function> {
     try {
       const api_output = await callOpenAiApi(user_input);
-      const js_code_block = parseMarkdown(api_output.choices[0].message.content);
+      const js_code_block = parseMarkdown(api_output);
       const function_name = extractFunctionName(js_code_block);
       const function_input = `
       ${js_code_block}
@@ -99,9 +100,8 @@ async function llmFunctionGeneration(user_input: string): Promise<Function> {
       // May want to run later in a vm due to security concerns
       return new Function(function_input)();
     } catch (error) {
-      console.error('An error occurred:', (error as Error).message);
-      throw new Error('An unexpected error occurred');
+      throw new Error('An error occurred while generating the llm function');
     }
 }
 
-export default llmFunctionGeneration;
+export {callOpenAiApi, parseMarkdown, extractFunctionName, llmFunctionGeneration}
