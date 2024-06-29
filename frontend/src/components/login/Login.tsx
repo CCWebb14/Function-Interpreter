@@ -15,6 +15,8 @@ export default function Login() {
             const response = await axios.post('http://localhost:4001/api/users/login', {
                 username,
                 password,
+            }, {
+                withCredentials: true
             });
 
             if (response.data.success) {

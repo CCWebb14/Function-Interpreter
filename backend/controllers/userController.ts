@@ -30,8 +30,6 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
     }
 };
 
-
-
 // Login Controllers (using npm passport :local strategy)
 export const loginUser = (req: Request, res: Response, next: NextFunction) => {
     // Use Passport to authenticate with the 'local' strategy
@@ -53,4 +51,13 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
             return res.json({ success: true, user });
         });
     })(req, res, next); // Call the authenticate function with req, res, and next
+};
+
+//Auth Controllers
+export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
+    if (req.isAuthenticated()) {
+        return res.status(200).json({ success: true, user: req.user });
+    } else {
+        return res.status(401).json({ success: false, message: 'Not authenticated' });
+    }
 };

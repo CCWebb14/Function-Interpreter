@@ -1,4 +1,4 @@
-import db from '../db';
+import db from '../models/db';
 
 async function testDatabaseConnection() {
     try {
