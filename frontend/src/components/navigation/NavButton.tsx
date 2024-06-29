@@ -14,16 +14,16 @@ We can use this for any button that navigates to a different part of the app
     - style (string): css styling for button e.g. 'login-button'
     - path (string): url path endpoint e.g. '/leaderboard'
 */
-export default function NavButton({name, style, path}: NavButtonProps) {
+export default function NavButton({ name, style, path }: NavButtonProps) {
     const navigate = useNavigate();
 
     // TODO: AUTHENTICATION?
-    const handleLogin = (e:any) => {
+    const handleLogin = (e: any) => {
         e.preventDefault();
         navigate(path);
     };
 
     return (
-        <button className={style} onClick={(e)=>handleLogin(e)}>{name}</button>
+        <button className={style} onClick={(e) => handleLogin(e)}>{name}</button>
     )
 }
