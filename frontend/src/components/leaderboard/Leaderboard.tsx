@@ -4,10 +4,10 @@ import Leader_Menu from './Leader_Menu'
 
 export default function Leaderboard() {
 
-    return(
+    return (
         <div className='app-container'>
             <Navbar />
-            <Leader_Menu />         
+            <Leader_Menu />
         </div>
     )
 }

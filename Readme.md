@@ -35,4 +35,3 @@ Note: any modifications made to TypeScript source files will be automatically de
 ```sh
 docker compose down
 ```
-
