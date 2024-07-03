@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { findUserByUsername, createUser } from '../models/users';
 import passport from 'passport';
-
+import session from 'express-session';
 //import bcrypt from 'bcrypt'; // Ensure bcrypt is imported
 
 //Signup Controllers
@@ -53,10 +53,27 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
     })(req, res, next); // Call the authenticate function with req, res, and next
 };
 
+
+//Logout Controllers
+export const logoutUser = (req: Request, res: Response, next: NextFunction) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        req.session.destroy((err) => {
+            if (err) {
+                return next(err);
+            }
+            res.clearCookie('310dev');
+            return res.status(200).json({ success: true, message: 'Logged out successfully' });
+        });
+    });
+};
+
 //Auth Controllers
 export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
-        return res.status(200).json({ success: true, user: req.user });
+        return res.status(200).json({ success: true });
     } else {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
     }
