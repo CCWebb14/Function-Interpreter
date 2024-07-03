@@ -1,12 +1,11 @@
 import Navbar from "../navbar/Navbar";
 import Menu from "./Menu";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkAuth } from '../../../util/auth';
 
 export default function Dashboard() {
 
-    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
