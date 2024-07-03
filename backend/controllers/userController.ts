@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { findUserByUsername, createUser } from '../models/users';
 import passport from 'passport';
-
+import session from 'express-session';
 //import bcrypt from 'bcrypt'; // Ensure bcrypt is imported
 
 //Signup Controllers
@@ -51,6 +51,23 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
             return res.json({ success: true, user });
         });
     })(req, res, next); // Call the authenticate function with req, res, and next
+};
+
+
+//Logout Controllers
+export const logoutUser = (req: Request, res: Response, next: NextFunction) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        req.session.destroy((err) => {
+            if (err) {
+                return next(err);
+            }
+            res.clearCookie('310dev');
+            return res.status(200).json({ success: true, message: 'Logged out successfully' });
+        });
+    });
 };
 
 //Auth Controllers
