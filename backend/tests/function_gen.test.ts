@@ -1,4 +1,4 @@
-import { callOpenAiApi, parseMarkdown, extractFunctionName, llmFunctionGeneration } from '../function_gen'
+import { callOpenAiApi, parseMarkdown, extractFunctionName, llmFunctionGeneration } from '../llm/function_gen'
 import * as chai from 'chai';
 import {expect} from 'chai';
 import chaiAsPromised  from 'chai-as-promised';

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registerUser, loginUser, checkAuth } from '../controllers/userController';
+import { registerUser, loginUser, checkAuth, llmSubmit } from '../controllers/userController';
 
 const router = Router();
 
@@ -9,6 +9,8 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 //Auth
 router.get('/checkAuth', checkAuth);
+//LLM 
+router.post('/submit/:id', llmSubmit);
 
 
 

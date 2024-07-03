@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { findUserByUsername, createUser } from '../models/users';
+import { llmFunctionGeneration } from '../llm/function_gen';
 import passport from 'passport';
 
 //import bcrypt from 'bcrypt'; // Ensure bcrypt is imported
@@ -57,6 +58,30 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
 export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
         return res.status(200).json({ success: true, user: req.user });
+    } else {
+        return res.status(401).json({ success: false, message: 'Not authenticated' });
+    }
+};
+
+//LLM Controllers
+interface LLM_Params {
+    id: string;
+}
+
+interface LLM_Body {
+    user_input: string;
+}
+
+// Request {{params}, {response body}, {request body}}
+interface llmRequest extends Request<LLM_Params, {}, LLM_Body> {}
+
+
+export const llmSubmit = async (req: llmRequest, res: Response, next: NextFunction) => {
+    if (req.isAuthenticated()) {
+        const { user_input } = req.body; 
+        const result = await llmFunctionGeneration(user_input);
+        // return result
+        return res.status(200).json({ success: true, message: result.toString() });
     } else {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
     }
