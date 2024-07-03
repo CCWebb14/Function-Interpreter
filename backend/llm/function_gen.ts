@@ -99,8 +99,8 @@ async function llmFunctionGeneration(user_input: string): Promise<Function> {
 
       // May want to run later in a vm due to security concerns
       return new Function(function_input)();
-    } catch (error) {
-      throw new Error('An error occurred while generating the llm function');
+    } catch (e) {
+      throw new Error(e);
     }
 }
 
