@@ -73,7 +73,7 @@ export const logoutUser = (req: Request, res: Response, next: NextFunction) => {
 //Auth Controllers
 export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
-        return res.status(200).json({ success: true, user: req.user });
+        return res.status(200).json({ success: true });
     } else {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
     }
