@@ -31,7 +31,7 @@ export const Function_Suite_Map: {[id: number]: Function_Suite} = {
             { parameters: [-6], expected_result: true },
             { parameters: [-7], expected_result: false },
             { parameters: [0], expected_result: true },
-            { parameters: [2.2], expected_result: true },
+            { parameters: [2.2], expected_result: false },
         ],
         test_count: 6, 
     },
