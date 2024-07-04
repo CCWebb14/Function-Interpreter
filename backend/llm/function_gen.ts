@@ -88,7 +88,6 @@ function extractFunctionName(function_code: string): string {
 }
 
 async function llmFunctionGeneration(user_input: string): Promise<Function> {
-    try {
       const api_output = await callOpenAiApi(user_input);
       const js_code_block = parseMarkdown(api_output);
       const function_name = extractFunctionName(js_code_block);
@@ -99,9 +98,6 @@ async function llmFunctionGeneration(user_input: string): Promise<Function> {
 
       // May want to run later in a vm due to security concerns
       return new Function(function_input)();
-    } catch (e) {
-      throw new Error(e);
-    }
 }
 
 export {callOpenAiApi, parseMarkdown, extractFunctionName, llmFunctionGeneration}

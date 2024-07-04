@@ -11,8 +11,13 @@ export const test_function = (llm_gen_function : Function, id : number) : test_r
 
     for (let i = 0; i < test_suite.test_count; i++) {
         const current_test : Function_Test = test_suite.tests[i];
-        if (llm_gen_function(...(current_test.parameters)) == current_test.expected_result) {
-            pass_count++;
+        try {
+            if (llm_gen_function(...(current_test.parameters)) == current_test.expected_result) {
+                pass_count++;
+            }
+        } catch (error) {
+            // The llm generated function encountered an error
+            // Continue with further tests
         }
     }
 
