@@ -13,7 +13,8 @@ export interface Function_Suite {
 
 export const Function_Suite_Map: {[id: number]: Function_Suite} = {
     0: {
-        function_string: "function sum(a, b) {\nreturn (a + b);\n}",
+        // sum function 
+        function_string: "function foo(a, b) {\nreturn (a + b);\n}",
         tests: [
             { parameters: [1, 2], expected_result: 3 },
             { parameters: [0, 0], expected_result: 0 },
@@ -24,7 +25,8 @@ export const Function_Suite_Map: {[id: number]: Function_Suite} = {
         test_count: 5, 
     },
     1: {
-        function_string: "function isEven(num) {\nreturn num % 2 === 0;\n}",
+        // isEven function 
+        function_string: "function boo(num) {\nreturn num % 2 === 0;\n}",
         tests: [
             { parameters: [4], expected_result: true },
             { parameters: [5], expected_result: false },
@@ -36,7 +38,8 @@ export const Function_Suite_Map: {[id: number]: Function_Suite} = {
         test_count: 6, 
     },
     2: {
-        function_string: "function max(a,b) {\nreturn a >b ? a: b;\n}",
+        // max function 
+        function_string: "function loo(a,b) {\nreturn a >b ? a: b;\n}",
         tests: [
             { parameters: [1, 4], expected_result: 4 },
             { parameters: [Number.MAX_VALUE, 2], expected_result: Number.MAX_VALUE },
@@ -47,7 +50,8 @@ export const Function_Suite_Map: {[id: number]: Function_Suite} = {
         test_count: 5, 
     },
     3: {
-        function_string: "function firstInstance(arr,num) {\nreturn arr.indexOf(num);\n}",
+        // firstInstance function 
+        function_string: "function doo(arr,num) {\nreturn arr.indexOf(num);\n}",
         tests: [
             { parameters: [[1, 2, 3, 4], 1], expected_result: 0 },
             { parameters: [[1, 1, 2, 3], 1], expected_result: 0 },
@@ -58,7 +62,8 @@ export const Function_Suite_Map: {[id: number]: Function_Suite} = {
         test_count: 5, 
     },
     4: {
-        function_string: "function countOccurrences(arr, num) {\n\tlet count = 0;\n\tfor (let i = 0; i < arr.length; i++) {\n\t\tif (arr[i] === num) {\n\t\t\tcount++;\n\t\t}\n\t}\n\treturn count;\n}",
+        // countOccurrences function 
+        function_string: "function coo(arr, num) {\n\tlet count = 0;\n\tfor (let i = 0; i < arr.length; i++) {\n\t\tif (arr[i] === num) {\n\t\t\tcount++;\n\t\t}\n\t}\n\treturn count;\n}",
         tests: [
             { parameters: [[1, 2, 3, 4], 1], expected_result: 1 },
             { parameters: [[1, 1, 2, 3], 5], expected_result: 0 },
