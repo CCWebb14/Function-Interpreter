@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registerUser, loginUser, checkAuth, llmSubmit, getQuestionList, getQuestion } from '../controllers/userController';
+import { registerUser, loginUser, checkAuth } from '../controllers/userController';
 
 const router = Router();
 
@@ -9,12 +9,5 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 //Auth
 router.get('/checkAuth', checkAuth);
-//LLM 
-router.post('/submit/:id', llmSubmit);
-//Get Question List
-router.get('/questions', getQuestionList)
-//Get Question
-router.get('/question/:id', getQuestion)
-
 
 export default router;
