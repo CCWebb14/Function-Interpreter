@@ -1,0 +1,25 @@
+# Ignore node_modules
+node_modules
+npm-debug.log
+
+# Ignore local environment configuration files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Ignore Docker-related files
+Dockerfile
+docker-compose.yml
+
+# Ignore frontend build artifacts
+frontend/build
+frontend/dist
+
+# Ignore backend build artifacts
+backend/build
+backend/dist
+
+# Ignore log files
+*.log
