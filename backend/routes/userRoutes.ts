@@ -12,6 +12,4 @@ router.post('/logout', logoutUser)
 //Auth
 router.get('/checkAuth', checkAuth);
 
-
-
 export default router;

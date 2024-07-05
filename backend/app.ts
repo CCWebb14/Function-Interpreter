@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import usersRoutes from './routes/userRoutes';
+import questionRoutes from './routes/questionRoutes';
 import cors from 'cors';
 import { configurePassport } from './config/passport';
 import session from 'express-session';
@@ -46,6 +47,9 @@ app.use(passport.session());
 
 // Use the user routes
 app.use('/api/users', usersRoutes);
+
+// Authenticated route for questions and submissions
+app.use('/api/question', questionRoutes);
 
 // Start the server
 app.listen(port, () => {

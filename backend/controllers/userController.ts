@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { findUserByUsername, createUser } from '../models/users';
+import { llmFunctionGeneration } from '../llm/function_gen';
+import { Function_Suite_Map } from '../llm/function_suite';
+import { test_function } from '../llm/function_test';
 import passport from 'passport';
 import session from 'express-session';
 //import bcrypt from 'bcrypt'; // Ensure bcrypt is imported
