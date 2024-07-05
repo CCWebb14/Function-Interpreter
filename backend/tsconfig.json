@@ -13,9 +13,6 @@
       "./backend/types"
     ]
   },
-  "include": [
-    "backend/**/*.ts"
-  ],
   "exclude": [
     "node_modules"
   ]
