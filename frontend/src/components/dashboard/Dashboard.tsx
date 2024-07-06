@@ -3,6 +3,7 @@ import Menu from "./Menu";
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkAuth } from '../../../util/auth';
+import AuthenticatedNavbar from "../navbar/AuthenticatedNavbar";
 
 export default function Dashboard() {
 
@@ -23,7 +24,7 @@ export default function Dashboard() {
 
     return (
         <div className='app-container'>
-            <Navbar />
+            <AuthenticatedNavbar />
             <Menu />
         </div>
     )

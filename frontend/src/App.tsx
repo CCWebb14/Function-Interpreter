@@ -1,13 +1,11 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/login/Login'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './styles/global.css'
 import Dashboard from './components/dashboard/Dashboard';
 import Leaderboard from './components/leaderboard/Leaderboard';
 import Question_Menu from './components/question_menu/Question_Menu';
 import Signup from './components/signup/Signup';
 import Landing from './components/landing/Landing';
-import Logout from './components/logout/Logout'
-
+import FourOhFour from './components/404notfound/notfound';
 function App() {
 
 
@@ -22,17 +20,14 @@ function App() {
     // </div>
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/landing" />} />
-
-        <Route path="/landing" element={<Landing />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
         {/* NOTE: TEMP UNTIL WE GET AUTHENTICATION UP */}
         <Route path="/dashboard" element={<Dashboard />} />
         {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/questions" element={<Question_Menu />} />
+        <Route path="*" element={<FourOhFour />} /> {/* Catch-all route for 404 Not Found */}
       </Routes>
     </Router>
   )

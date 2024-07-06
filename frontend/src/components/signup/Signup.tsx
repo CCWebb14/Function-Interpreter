@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/login.css';
+import Navbar from '../navbar/Navbar';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { checkAuth } from '../../../util/auth'; // Import checkAuth
+
 
 export default function Signup() {
     const [formData, setFormData] = useState({
@@ -10,6 +14,18 @@ export default function Signup() {
         lastName: '',
         email: ''
     });
+
+    const navigate = useNavigate(); // Initialize navigate
+
+    useEffect(() => {
+        const authenticate = async () => {
+            const isAuthenticated = await checkAuth();
+            if (isAuthenticated) {
+                navigate('/dashboard'); // Redirect to dashboard if authenticated
+            }
+        };
+        authenticate();
+    }, [navigate]);
 
     /*OLD SCHOOL WAY BUT GOOD FOR CLARITY, superseeded by Google.com's spread operator (see below)
     setFormData((prevFormData) => {
@@ -62,67 +78,70 @@ export default function Signup() {
     };
 
     return (
-        <div className="white-box">
-            <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit} className="signup-form">
-                <div className="form-group">
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="firstName">First Name:</label>
-                    <input
-                        type="text"
-                        id="firstName"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="lastName">Last Name:</label>
-                    <input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit" className="signup-button">Sign Up</button>
-            </form>
-            {message && <p>{message}</p>} {/* Display the message */}
+        <div className='app-container'>
+            <Navbar />
+            <div className="white-box">
+                <h2>Sign Up</h2>
+                <form onSubmit={handleSubmit} className="signup-form">
+                    <div className="form-group">
+                        <label htmlFor="username">Username:</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="firstName">First Name:</label>
+                        <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="lastName">Last Name:</label>
+                        <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="signup-button">Sign Up</button>
+                </form>
+                {message && <p>{message}</p>} {/* Display the message */}
+            </div>
         </div>
     );
 }
