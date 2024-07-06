@@ -13,14 +13,12 @@ const initialState = {
     success: '',
     test_result: '',
     llm_function: '',
-    returned: false
 };
 
 interface StateType {
     success: string;
     test_result: string;
     llm_function: string;
-    returned: boolean;
 }
 
 type response = {
@@ -32,7 +30,7 @@ type response = {
 }
 
 export default function Question() {
-    const [answer, setAnswer] = useState('');
+    const [user_input, setUserInput] = useState('');
     const [results, setResults] = useState(false);
     const [state] = useState<StateType>(initialState);
     const [submitError, setSubmitError] = useState('');
@@ -42,18 +40,14 @@ export default function Question() {
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
-        const json_submission = {answer}
-
-        console.log(json_submission);
-        console.log(answer);
 
         try {
             const axios_response : response = await axios.post(`http://localhost:4001/api/question/submit/${id}`, {
-                answer
+                user_input
         });
             if (axios_response.data.success) {
                 console.log(axios_response.data.test_result)
-                state.returned = true;
+                setResults(true);
                 state.success = axios_response.data.success;
                 state.test_result = axios_response.data.test_result;
                 state.llm_function = axios_response.data.llm_function;
@@ -84,12 +78,12 @@ export default function Question() {
                     required
                     sx={{display : 'flex'}}
                     onChange={
-                        (e) => setAnswer(e.target.value)
+                        (e) => setUserInput(e.target.value)
                     }
                 />
                 <div className='footer'>
                     <div className='spacer'></div>
-                    {state.returned ? (
+                    {results ? (
                         <Alert severity="success">
                         <AlertTitle>Success</AlertTitle>
                             {state.test_result}
