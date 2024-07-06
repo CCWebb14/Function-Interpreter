@@ -14,7 +14,7 @@ export default function Logout() {
 
                 if (response.status === 200) {
                     // Redirect to the login page or home page
-                    navigate('/landing');
+                    navigate('/');
                 } else {
                     console.error('Logout failed');
                 }

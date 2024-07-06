@@ -1,32 +1,91 @@
+.login-header {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    color: #000;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal; 
+}
+
 .login-button {
-    background-color: #8b5da3;
-    color: #ffffff;
-    border: none;
-    width: 50%;
-    height: 30px;
-    margin: 5px;
-    border-radius: 10px;
-    padding: 6px 20px;
-    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    height: var(--40, 40px);
+    flex-shrink: 0; 
+    border-radius: 20px;
+    background-color: var(--Color-2, #7986CB); 
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    /* Typography */
+    color: #FFF;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal; 
 }
 
 .login-button:hover {
-  background-color: #7d4f96;
+  background-color: #1A237E;
 }
 
-.white-box {
-  width: 25vw;
-  height: 50vh;
-  background-color: #ffffff;
-  border-radius: 10px; /* Adjust as needed for rounded edges */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
-  margin: auto; /* Center horizontally */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 20px;
+.login-container {
+    display: flex;
+    flex-direction: column;
+    width: 368px;
+    height: 430px;
+    border-radius: 20px;
+    background: #FFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.login-box {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+    align-items: center; 
+    padding: 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.need-account-frame {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+}
+
+.need-account {
+    color: rgba(0, 0, 0, 0.38);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal; 
+}
+
+.join-now {
+    color: var(--Color-2, #7986CB);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal; 
+    cursor: pointer;
+}
+
+.join-now:hover {
+    color: #1A237E;
+}
+
+.error-field {
+    color: red;
 }

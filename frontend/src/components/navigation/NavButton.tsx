@@ -24,6 +24,6 @@ export default function NavButton({ name, style, path }: NavButtonProps) {
     };
 
     return (
-        <button className={style} onClick={(e) => handleLogin(e)}>{name}</button>
+        <div className={style} onClick={(e) => handleLogin(e)}>{name}</div>
     )
 }

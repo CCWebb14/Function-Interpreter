@@ -1,4 +1,3 @@
-import Navbar from "../navbar/Navbar";
 import Menu from "./Menu";
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +22,6 @@ export default function Dashboard() {
 
     return (
         <div className='app-container'>
-            <Navbar />
             <Menu />
         </div>
     )

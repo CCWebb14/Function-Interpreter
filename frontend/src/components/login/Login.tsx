@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../styles/login.css';
+import TextField from '@mui/material/TextField';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -35,32 +36,24 @@ export default function Login() {
     };
 
     return (
-        <div className="white-box">
-            <h2>Login</h2>
-            {error && <p className="error">{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
+        <div className='login-container'>
+            <div className="login-box">
+                <div className='form-group'>
+                    <div className='login-header'>Login</div>
+                            <TextField label="Username" variant="outlined" size="medium" fullWidth required onChange={
+                                (e) => setUsername(e.target.value)
+                            }/>
+                            <TextField label="Password" variant="outlined" size="medium" fullWidth required onChange={
+                                (e) => setPassword(e.target.value)
+                            }/>
+                        <div onClick={handleSubmit} className="login-button">Login</div>
+                        <div className='need-account-frame'>
+                            <div className='need-account'>Need an account?</div>
+                            <div className='join-now'>Join now</div>
+                        </div>
+                        <div className='error-field'>{error}</div>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" className="login-button">Login</button>
-            </form>
+            </div>
         </div>
     );
 }
