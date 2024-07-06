@@ -1,0 +1,51 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+// good to have an initial state to reset
+const initialState = {
+	results: '',
+};
+
+interface StateType {
+    results: string;
+}
+
+type response = {
+    data: {
+        success: string;
+        message: string;
+    }
+}
+
+export const useQuestionFetch = (id: string | undefined) => {
+	// initial state as false
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(false);
+    // add initial state from above
+    const [state, setState] = useState<StateType>(initialState);
+
+    const FetchQuestion = async () => {
+        try {
+            setLoading(true);
+            const res : response = await axios.get(`http://localhost:4001/api/question/id/${id}`)
+
+            setState(() => ({   
+                results : res.data.message
+			}));
+        } catch (err) {
+            setError(true);
+        }
+        setLoading(false);
+    }
+
+    // Use only on mount, [] is a dependancy array, ie: when do we want it to trigger
+	// if empty will run once
+	// Initial Render and search
+	useEffect(() => {
+		setState(initialState);
+		// fetch question list
+		FetchQuestion();
+	}, []);
+
+    return { state, loading, error };
+}
