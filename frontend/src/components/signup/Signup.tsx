@@ -9,8 +9,8 @@ export default function Signup() {
     const [password, setPassword] = useState('');
     // TODO: Password repeat & comparison
     // TODO: To be removed only need username and password
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [firstName, setFirstName] = useState('tmp');
+    const [lastName, setLastName] = useState('tmp');
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -61,26 +61,20 @@ export default function Signup() {
     };
 
     return (
-        <div className='box-container'>
+        <div className='box-container-su'>
                     <div className="box">
                         <div className='form-group'>
-                            <div className='login-header'>Login</div>
+                            <div className='login-header'>Sign up</div>
                                     <TextField label="Username" variant="outlined" size="medium" fullWidth required onChange={
                                         (e) => setUsername(e.target.value)
                                     }/>
                                     <TextField label="Password" type='password' variant="outlined" size="medium" fullWidth required onChange={
                                         (e) => setPassword(e.target.value)
                                     }/>
-                                    <TextField label="First Name" variant="outlined" size="medium" fullWidth required onChange={
-                                        (e) => setFirstName(e.target.value)
-                                    }/>
-                                    <TextField label="Last Name" variant="outlined" size="medium" fullWidth required onChange={
-                                        (e) => setLastName(e.target.value)
-                                    }/>
                                     <TextField label="Email" variant="outlined" size="medium" fullWidth required onChange={
                                         (e) => setEmail(e.target.value)
                                     }/>
-                                <div onClick={handleSubmit} className="login-button">Sign up</div>
+                                <div onClick={handleSubmit} className="button">Sign up</div>
                                 <div className='need-account-frame'>
                                     <div className='need-account'>Have an account?</div>
                                     <div className='join-now' onClick={handleNav}>Login here</div>

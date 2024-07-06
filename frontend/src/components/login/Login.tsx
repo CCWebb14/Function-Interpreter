@@ -21,7 +21,8 @@ export default function Login() {
             });
 
             if (response.data.success) {
-                navigate('/dashboard');
+                // TODO: Change to dashboard when complete
+                navigate('/questions');
             } else {
                 setError(response.data.message || 'Login failed');
             }
@@ -46,7 +47,7 @@ export default function Login() {
                             <TextField label="Password" type='password'  variant="outlined" size="medium" fullWidth required onChange={
                                 (e) => setPassword(e.target.value)
                             }/>
-                        <div onClick={handleSubmit} className="login-button">Login</div>
+                        <div onClick={handleSubmit} className="button">Login</div>
                         <div className='need-account-frame'>
                             <div className='need-account'>Need an account?</div>
                             <div className='join-now' onClick={handleNav}>Join now</div>
