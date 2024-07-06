@@ -1,6 +1,16 @@
 @import './app.css';
 
-.box-container-su {
+.box-container-q {
+    display: flex;
+    flex-direction: column;
     width: 760px;
     height: 700px;
+    border-radius: 20px;
+    background: #FFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.test {
+    height: 1000px;
+    width: 1000px;
 }
