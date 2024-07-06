@@ -10,7 +10,8 @@ COPY . .
 
 ENV VITE_PORT=4000
 
-RUN npm run build
+# TODO: For prod build
+#  RUN npm run build
 
 EXPOSE 4000
 

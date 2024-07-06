@@ -30,6 +30,11 @@ export default function Login() {
         }
     };
 
+    const handleNav = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.preventDefault();
+        navigate('/signup')
+    };
+
     return (
         <div className='box-container'>
             <div className="box">
@@ -38,13 +43,13 @@ export default function Login() {
                             <TextField label="Username" variant="outlined" size="medium" fullWidth required onChange={
                                 (e) => setUsername(e.target.value)
                             }/>
-                            <TextField label="Password" variant="outlined" size="medium" fullWidth required onChange={
+                            <TextField label="Password" type='password'  variant="outlined" size="medium" fullWidth required onChange={
                                 (e) => setPassword(e.target.value)
                             }/>
                         <div onClick={handleSubmit} className="login-button">Login</div>
                         <div className='need-account-frame'>
                             <div className='need-account'>Need an account?</div>
-                            <div className='join-now'>Join now</div>
+                            <div className='join-now' onClick={handleNav}>Join now</div>
                         </div>
                         <div className='error-field'>{error}</div>
                 </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../../styles/login-signup.css';
 import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
     const [username, setUsername] = useState('');
@@ -42,15 +43,21 @@ export default function Signup() {
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
-        //Endpoint here
+        const formData = {username, password, firstName, lastName, email}
+
         try {
             const response = await axios.post('http://localhost:4001/api/users/register', 
-                [username, password, firstName, lastName, email]
+                formData
             );
             setMessage(response.data.message);
         } catch (err) {
             setMessage('Error creating user');
         }
+    };
+
+    const handleNav = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.preventDefault();
+        navigate('/login')
     };
 
     return (
@@ -61,22 +68,22 @@ export default function Signup() {
                                     <TextField label="Username" variant="outlined" size="medium" fullWidth required onChange={
                                         (e) => setUsername(e.target.value)
                                     }/>
-                                    <TextField label="Password" variant="outlined" size="medium" fullWidth required onChange={
+                                    <TextField label="Password" type='password' variant="outlined" size="medium" fullWidth required onChange={
                                         (e) => setPassword(e.target.value)
                                     }/>
                                     <TextField label="First Name" variant="outlined" size="medium" fullWidth required onChange={
                                         (e) => setFirstName(e.target.value)
                                     }/>
                                     <TextField label="Last Name" variant="outlined" size="medium" fullWidth required onChange={
-                                        (e) => setPassword(e.target.value)
+                                        (e) => setLastName(e.target.value)
                                     }/>
                                     <TextField label="Email" variant="outlined" size="medium" fullWidth required onChange={
-                                        (e) => setPassword(e.target.value)
+                                        (e) => setEmail(e.target.value)
                                     }/>
                                 <div onClick={handleSubmit} className="login-button">Sign up</div>
                                 <div className='need-account-frame'>
                                     <div className='need-account'>Have an account?</div>
-                                    <div className='join-now'>Login here</div>
+                                    <div className='join-now' onClick={handleNav}>Login here</div>
                                 </div>
                                 <div className='error-field'>{message}</div>
                         </div>
