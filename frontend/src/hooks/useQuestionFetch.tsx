@@ -22,14 +22,14 @@ export const useQuestionFetch = (id: string | undefined) => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
     // add initial state from above
-    const [state, setState] = useState<StateType>(initialState);
+    const [questionFetchState, setQuestionFetchState] = useState<StateType>(initialState);
 
     const FetchQuestion = async () => {
         try {
             setLoading(true);
             const res : response = await axios.get(`http://localhost:4001/api/question/id/${id}`)
 
-            setState(() => ({   
+            setQuestionFetchState(() => ({   
                 results : res.data.message
 			}));
         } catch (err) {
@@ -42,10 +42,10 @@ export const useQuestionFetch = (id: string | undefined) => {
 	// if empty will run once
 	// Initial Render and search
 	useEffect(() => {
-		setState(initialState);
+		setQuestionFetchState(initialState);
 		// fetch question list
 		FetchQuestion();
 	}, []);
 
-    return { state, loading, error };
+    return { questionFetchState, loading, error };
 }
