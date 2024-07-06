@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import '../../styles/login.css'
+import '../../styles/login-signup.css'
 import '../../styles/buttons.css'
 
 interface NavButtonProps {

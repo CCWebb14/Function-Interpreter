@@ -1,4 +1,4 @@
-import '../../styles/login.css'
+import '../../styles/login-signup.css'
 import Leader_Menu from './Leader_Menu'
 
 export default function Leaderboard() {

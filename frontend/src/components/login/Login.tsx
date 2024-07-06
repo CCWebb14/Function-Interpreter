@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../../styles/login.css';
+import '../../styles/login-signup.css';
 import TextField from '@mui/material/TextField';
 
 export default function Login() {
@@ -10,7 +10,7 @@ export default function Login() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:4001/api/users/login', {
@@ -26,18 +26,13 @@ export default function Login() {
                 setError(response.data.message || 'Login failed');
             }
         } catch (err) {
-            if (axios.isAxiosError(err) && err.response) {
-                setError(err.response.data.message || 'An error occurred. Please try again.');
-            } else {
-                setError('An error occurred. Please try again.');
-            }
-            console.error(err);
+            setError('An error occurred. Please try again.');
         }
     };
 
     return (
-        <div className='login-container'>
-            <div className="login-box">
+        <div className='box-container'>
+            <div className="box">
                 <div className='form-group'>
                     <div className='login-header'>Login</div>
                             <TextField label="Username" variant="outlined" size="medium" fullWidth required onChange={

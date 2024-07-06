@@ -1,4 +1,4 @@
-import '../../styles/login.css'
+import '../../styles/login-signup.css'
 import NavButton from '../navigation/NavButton'
 
 export default function Question_MenuBox() {

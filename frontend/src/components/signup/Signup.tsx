@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../../styles/login.css';
+import '../../styles/login-signup.css';
+import TextField from '@mui/material/TextField';
 
 export default function Signup() {
-    const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-        firstName: '',
-        lastName: '',
-        email: ''
-    });
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    // TODO: Password repeat & comparison
+    // TODO: To be removed only need username and password
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     /*OLD SCHOOL WAY BUT GOOD FOR CLARITY, superseeded by Google.com's spread operator (see below)
     setFormData((prevFormData) => {
@@ -35,94 +38,49 @@ export default function Signup() {
           updatedFormData.email = value;
         }*/
 
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        //Get element from html page , e.target.name/e.target.value to use
-        const { name, value } = e.target;
-        setFormData({
-            //Learning : ... is a spread  operator, essentially creating updatedFormData above
-            ...formData,
-            //dynamically sets name from forms
-            [name]: value
-        });
-    };
-
     const [message, setMessage] = useState(''); // Define the message state
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.preventDefault();
         //Endpoint here
         try {
-            const response = await axios.post('http://localhost:4001/api/users/register', formData);
+            const response = await axios.post('http://localhost:4001/api/users/register', 
+                [username, password, firstName, lastName, email]
+            );
             setMessage(response.data.message);
-        } catch (error) {
-            console.error('There was an error submitting the form!', error);
+        } catch (err) {
             setMessage('Error creating user');
         }
     };
 
     return (
-        <div className="white-box">
-            <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit} className="signup-form">
-                <div className="form-group">
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
-                    />
+        <div className='box-container'>
+                    <div className="box">
+                        <div className='form-group'>
+                            <div className='login-header'>Login</div>
+                                    <TextField label="Username" variant="outlined" size="medium" fullWidth required onChange={
+                                        (e) => setUsername(e.target.value)
+                                    }/>
+                                    <TextField label="Password" variant="outlined" size="medium" fullWidth required onChange={
+                                        (e) => setPassword(e.target.value)
+                                    }/>
+                                    <TextField label="First Name" variant="outlined" size="medium" fullWidth required onChange={
+                                        (e) => setFirstName(e.target.value)
+                                    }/>
+                                    <TextField label="Last Name" variant="outlined" size="medium" fullWidth required onChange={
+                                        (e) => setPassword(e.target.value)
+                                    }/>
+                                    <TextField label="Email" variant="outlined" size="medium" fullWidth required onChange={
+                                        (e) => setPassword(e.target.value)
+                                    }/>
+                                <div onClick={handleSubmit} className="login-button">Sign up</div>
+                                <div className='need-account-frame'>
+                                    <div className='need-account'>Have an account?</div>
+                                    <div className='join-now'>Login here</div>
+                                </div>
+                                <div className='error-field'>{message}</div>
+                        </div>
+                    </div>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="firstName">First Name:</label>
-                    <input
-                        type="text"
-                        id="firstName"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="lastName">Last Name:</label>
-                    <input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit" className="signup-button">Sign Up</button>
-            </form>
-            {message && <p>{message}</p>} {/* Display the message */}
-        </div>
     );
 }
