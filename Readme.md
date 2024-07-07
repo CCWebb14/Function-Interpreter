@@ -20,31 +20,13 @@ This is a web application that assesses novice-level code comprehension using ge
 
 #### Loading docker images
 ```sh
-docker load project-groups-02-lab-b-frontend.tar.gz &&
-docker load project-groups-02-lab-b-backend.tar.gz
+docker load < project-groups-02-lab-b-frontend.tar.gz &&
+docker load < project-groups-02-lab-b-backend.tar.gz
 ```
 
 #### Running images
 
-##### Option 1 (docker run):
-
-##### Starting the service 
-
-```sh
-docker run -p 4000:4000 -d project-groups-02-lab-b-frontend &&
-docker run -p 4001:4001 -d project-groups-02-lab-b-backend
-```
-
-##### Stopping the service 
-```sh
-docker stop $frontend_container_id  &&
-docker stop $backend_container_id
-```
-
-To view the associated web pages navigate to 
-[localhost:4000](http://localhost:4000)
-
-##### Option 2 (docker compose):
+##### Option 1 (docker compose):
 
 Create a docker-compose.yml file
 
@@ -73,6 +55,24 @@ To view the associated web pages navigate to
 ```sh
 docker compose down
 ```
+
+##### Option 2 (docker run):
+
+##### Starting the service 
+
+```sh
+docker run -p 4000:4000 -d project-groups-02-lab-b-frontend &&
+docker run -p 4001:4001 -d project-groups-02-lab-b-backend
+```
+
+##### Stopping the service 
+```sh
+docker stop $frontend_container_id  &&
+docker stop $backend_container_id
+```
+
+To view the associated web pages navigate to 
+[localhost:4000](http://localhost:4000)
 
 ### Development instructions
 
