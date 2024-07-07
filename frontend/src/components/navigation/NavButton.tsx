@@ -5,7 +5,8 @@ import '../../styles/buttons.css'
 interface NavButtonProps {
     name: string;
     style: string;
-    path: string;
+    path?: string;
+    onClick?: () => void;
 }
 /* Navigation Button
 We can use this for any button that navigates to a different part of the app
@@ -14,16 +15,19 @@ We can use this for any button that navigates to a different part of the app
     - style (string): css styling for button e.g. 'login-button'
     - path (string): url path endpoint e.g. '/leaderboard'
 */
-export default function NavButton({ name, style, path }: NavButtonProps) {
+export default function NavButton({ name, style, path, onClick }: NavButtonProps) {
     const navigate = useNavigate();
 
-    // TODO: AUTHENTICATION?
-    const handleLogin = (e: any) => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault();
-        navigate(path);
+        if (onClick) {
+            onClick();
+        } else if (path) {
+            navigate(path);
+        }
     };
 
     return (
-        <div className={style} onClick={(e) => handleLogin(e)}>{name}</div>
+        <div className={style} onClick={handleClick}>{name}</div>
     )
 }

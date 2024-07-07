@@ -22,7 +22,7 @@ export default function Login() {
 
             if (response.data.success) {
                 // TODO: Change to dashboard when complete
-                navigate('/questions');
+                navigate('/dashboard');
             } else {
                 setError(response.data.message || 'Login failed');
             }

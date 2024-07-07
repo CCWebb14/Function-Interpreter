@@ -1,19 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/login-signup.css';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../navbar/Navbar';
+import { checkAuth } from '../../../util/auth'; 
+
 
 export default function Signup() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    // TODO: Password repeat & comparison
-    // TODO: To be removed only need username and password
     const [firstName, setFirstName] = useState('tmp');
     const [lastName, setLastName] = useState('tmp');
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const authenticate = async () => {
+            const isAuthenticated = await checkAuth();
+            if (isAuthenticated) {
+                navigate('/dashboard'); // Redirect to dashboard if authenticated
+            }
+        };
+        authenticate();
+    }, [navigate]);
 
     /*OLD SCHOOL WAY BUT GOOD FOR CLARITY, superseeded by Google.com's spread operator (see below)
     setFormData((prevFormData) => {
