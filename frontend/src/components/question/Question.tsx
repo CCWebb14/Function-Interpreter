@@ -125,7 +125,7 @@ export default function Question() {
                 <div className='box'>
                     <div className='question-header'>Output</div>
                     <SyntaxHighlighter  language="javascript" showLineNumbers style={dark}
-                    customStyle={{display:'flex', width:'100%', flex: 1, padding: 0}} >
+                    customStyle={{display:'flex', width:'100%',  flex: 1, padding: 0}} >
                         {state.llm_function}
                     </SyntaxHighlighter>
                 </div>

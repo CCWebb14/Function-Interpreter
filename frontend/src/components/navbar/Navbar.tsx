@@ -12,7 +12,7 @@ export default function Navbar() {
                         {/* TODO: <NavButton name={'Main Menu'} style={'navbar-button'} path={'/dashboard'} /> */}
                         <NavButton name={'Questions'} style={'navbar-button'} path={'/questions'} />
                         {/* TODO: <NavButton name={'Leaderboard'} style={'navbar-button'} path={'/leaderboard'} /> */}
-                        <NavButton name={'Logout'} style={'navbar-button'} path={'/logout'} />
+                        <NavButton name={'Logout'} style={'navbar-button-highlighted'} path={'/logout'} />
                     </div>
             </div>
         </div>

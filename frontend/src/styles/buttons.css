@@ -12,7 +12,7 @@
     transition: background-color 0.3s ease;
 }
 
-.navbar-button {
+.navbar-button-highlighted {
     display: inline-flex;
     padding: 12px 5px 12px 10px; 
     justify-content: center;
@@ -20,11 +20,33 @@
     gap: 10px; 
     border-radius: 8px; background: var(--Color-2, #7986CB); 
     color: white;
-
     display: flex;
     padding: 16px 20px;
+    cursor: pointer;
+}
+
+.navbar-button-highlighted:hover {
+    background-color: #1A237E
+}
+
+.navbar-button {
+    display: inline-flex;
+    padding: 12px 5px 12px 10px; 
+    justify-content: center;
+    align-items: center;
+    gap: 10px; 
+    color: white;
+    display: flex;
+    padding: 16px 20px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.50); 
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal; 
+    cursor: pointer;
 }
 
 .navbar-button:hover {
-    background-color: #1A237E
-  }
+    color: #1A237E
+}
