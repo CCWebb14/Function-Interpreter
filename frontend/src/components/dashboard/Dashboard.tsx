@@ -1,9 +1,8 @@
-import Navbar from "../navbar/Navbar";
-import Menu from "./Menu";
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkAuth } from '../../../util/auth';
-import AuthenticatedNavbar from "../navbar/AuthenticatedNavbar";
+// TODO: STUBBED
+import '../../styles/login-signup.css';
 
 export default function Dashboard() {
 
@@ -15,7 +14,7 @@ export default function Dashboard() {
             if (isAuthenticated) {
                 navigate('/dashboard');
             } else {
-                navigate('/landing');; // Redirect to landing page
+                navigate('/login'); // Redirect to login page
             }
         };
         authenticate();
@@ -23,9 +22,9 @@ export default function Dashboard() {
 
 
     return (
-        <div className='app-container'>
-            <AuthenticatedNavbar />
-            <Menu />
+        // TODO: Stubbed component
+        <div className='box-container'>
+            <div className='box'>STUB</div>            
         </div>
     )
 }

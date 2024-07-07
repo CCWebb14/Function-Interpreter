@@ -1,0 +1,44 @@
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Logs
+logs
+*.log
+
+# Dependency directories
+jspm_packages/
+
+# Production build output
+dist/
+build/
+
+# Optional npm cache directory
+.npm
+
+# General
+.DS_Store
+*.swp
+*.swo
+*.swn
+*.swm
+*.swr
+*.swx
+
+# Editor directories and files
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+
+# Git
+.git
+.gitignore
+
+# Docker specific files
+docker-compose.override.yml
+Dockerfile*

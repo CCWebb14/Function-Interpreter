@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import '../../styles/login.css'
+import '../../styles/login-signup.css'
 import '../../styles/buttons.css'
 
 interface NavButtonProps {
@@ -18,7 +18,7 @@ We can use this for any button that navigates to a different part of the app
 export default function NavButton({ name, style, path, onClick }: NavButtonProps) {
     const navigate = useNavigate();
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault();
         if (onClick) {
             onClick();
@@ -28,6 +28,6 @@ export default function NavButton({ name, style, path, onClick }: NavButtonProps
     };
 
     return (
-        <button className={style} onClick={handleClick}>{name}</button>
+        <div className={style} onClick={handleClick}>{name}</div>
     )
 }

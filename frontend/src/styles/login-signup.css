@@ -1,0 +1,72 @@
+@import './app.css';
+
+.login-header {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    color: #000;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal; 
+}
+
+.button {
+    width: 220px;
+    height: var(--40, 40px);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.need-account-frame {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+}
+
+.need-account {
+    color: rgba(0, 0, 0, 0.38);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal; 
+}
+
+.join-now {
+    color: var(--Color-2, #7986CB);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal; 
+    cursor: pointer;
+}
+
+.join-now:hover {
+    color: #1A237E;
+}
+
+.error-field {
+    color: red;
+}
+
+.box-container {
+    width: 368px;
+    height: 430px;
+}
+
+.box-container-su {
+    display: flex;
+    flex-direction: column;
+    width: 368px;
+    height: 500px;
+    border-radius: 20px;
+    background: #FFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}

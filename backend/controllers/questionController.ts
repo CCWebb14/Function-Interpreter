@@ -14,7 +14,8 @@ export const llmSubmit = async (req: llmRequest, res: Response, next: NextFuncti
             const llm_gen_function = await llmFunctionGeneration(user_input);
             const test_results = await test_function(llm_gen_function, id);
             return res.status(200).json({ success: true,
-                test_result: `Tests passed: ${test_results.tests_passed} / ${test_results.total_tests}`,
+                tests_passed: test_results.tests_passed,
+                tests_failed: test_results.total_tests,
                 llm_function: llm_gen_function.toString()
              });
         } catch (e) {
