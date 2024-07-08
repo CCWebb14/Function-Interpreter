@@ -4,7 +4,7 @@ import '../../styles/login-signup.css';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/Navbar';
-import { checkAuth } from '../../../util/auth'; 
+import { checkAuth } from '../../../util/auth';
 
 
 export default function Signup() {
@@ -54,15 +54,26 @@ export default function Signup() {
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
-        const formData = {username, password, firstName, lastName, email}
+        const formData = { username, password, firstName, lastName, email }
 
         try {
-            const response = await axios.post('http://localhost:4001/api/users/register', 
+            const response = await axios.post('http://localhost:4001/api/users/register',
                 formData
             );
-            setMessage(response.data.message);
+            setMessage('You have successfully registered!');
         } catch (err) {
-            setMessage('Error creating user');
+            if (axios.isAxiosError(err)) {
+                if (err.response && err.response.status === 400) {
+                    setMessage('Username already taken');
+                } else if (err.response && err.response.status === 401) {
+                    setMessage('Email already taken');
+
+                } else {
+                    setMessage('Error creating user');
+                }
+            } else {
+                setMessage('An unexpected error occurred');
+            }
         }
     };
 
@@ -73,26 +84,26 @@ export default function Signup() {
 
     return (
         <div className='box-container-su'>
-                    <div className="box">
-                        <div className='form-group'>
-                            <div className='login-header'>Sign up</div>
-                                    <TextField label="Username" variant="outlined" size="medium" fullWidth required onChange={
-                                        (e) => setUsername(e.target.value)
-                                    }/>
-                                    <TextField label="Password" type='password' variant="outlined" size="medium" fullWidth required onChange={
-                                        (e) => setPassword(e.target.value)
-                                    }/>
-                                    <TextField label="Email" variant="outlined" size="medium" fullWidth required onChange={
-                                        (e) => setEmail(e.target.value)
-                                    }/>
-                                <div onClick={handleSubmit} className="button">Sign up</div>
-                                <div className='need-account-frame'>
-                                    <div className='need-account'>Have an account?</div>
-                                    <div className='join-now' onClick={handleNav}>Login here</div>
-                                </div>
-                                <div className='error-field'>{message}</div>
-                        </div>
+            <div className="box">
+                <div className='form-group'>
+                    <div className='login-header'>Sign up</div>
+                    <TextField label="Username" variant="outlined" size="medium" fullWidth required onChange={
+                        (e) => setUsername(e.target.value)
+                    } />
+                    <TextField label="Password" type='password' variant="outlined" size="medium" fullWidth required onChange={
+                        (e) => setPassword(e.target.value)
+                    } />
+                    <TextField label="Email" variant="outlined" size="medium" fullWidth required onChange={
+                        (e) => setEmail(e.target.value)
+                    } />
+                    <div onClick={handleSubmit} className="button">Sign up</div>
+                    <div className='need-account-frame'>
+                        <div className='need-account'>Have an account?</div>
+                        <div className='join-now' onClick={handleNav}>Login here</div>
                     </div>
+                    <div className='error-field'>{message}</div>
                 </div>
+            </div>
+        </div>
     );
 }

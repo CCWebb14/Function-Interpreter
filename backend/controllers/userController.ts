@@ -1,10 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { findUserByUsername, createUser } from '../models/users';
-import { llmFunctionGeneration } from '../llm/function_gen';
-import { Function_Suite_Map } from '../llm/function_suite';
-import { test_function } from '../llm/function_test';
+import { findUserByUsername, findUserByEmail, createUser } from '../models/users';
 import passport from 'passport';
-import session from 'express-session';
 //import bcrypt from 'bcrypt'; // Ensure bcrypt is imported
 
 //Signup Controllers
@@ -16,6 +12,12 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
         const existingUser = await findUserByUsername(username);
         if (existingUser) {
             res.status(400).json({ message: 'Username already taken' });
+            return;
+        }
+
+        const existingEmail = await findUserByEmail(email)
+        if (existingEmail) {
+            res.status(401).json({ message: 'Username already taken' });
             return;
         }
 
@@ -36,7 +38,7 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 // Login Controllers (using npm passport :local strategy)
 export const loginUser = (req: Request, res: Response, next: NextFunction) => {
     // Use Passport to authenticate with the 'local' strategy
-    passport.authenticate('local', (err, user, info) => {
+    passport.authenticate('local', (err: any, user: any, info: any) => {
         // Handle any errors that occur during authentication
         if (err) return next(err);
 
