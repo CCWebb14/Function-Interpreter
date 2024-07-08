@@ -21,6 +21,16 @@ export const findUserByUsername = async (username: string): Promise<User | null>
     }
 };
 
+export const findUserByEmail = async (email: string): Promise<User | null> => {
+    try {
+        const user = await db('users').where({ email }).first();
+        return user || null;
+    } catch (error) {
+        console.error('Error finding user by email:', error);
+        throw error;
+    }
+};
+
 export const findUserById = async (userID: number): Promise<User | null> => {
     try {
         const user = await db('users').where({ userID }).first();

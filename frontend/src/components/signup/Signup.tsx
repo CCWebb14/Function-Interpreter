@@ -65,6 +65,9 @@ export default function Signup() {
             if (axios.isAxiosError(err)) {
                 if (err.response && err.response.status === 400) {
                     setMessage('Username already taken');
+                } else if (err.response && err.response.status === 401) {
+                    setMessage('Email already taken');
+
                 } else {
                     setMessage('Error creating user');
                 }
