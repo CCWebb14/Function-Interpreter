@@ -38,7 +38,7 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 // Login Controllers (using npm passport :local strategy)
 export const loginUser = (req: Request, res: Response, next: NextFunction) => {
     // Use Passport to authenticate with the 'local' strategy
-    passport.authenticate('local', (err, user, info) => {
+    passport.authenticate('local', (err: any, user: any, info: any) => {
         // Handle any errors that occur during authentication
         if (err) return next(err);
 

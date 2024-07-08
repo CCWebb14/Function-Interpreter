@@ -4,22 +4,27 @@ import { Function_Suite_Map } from '../llm/function_suite';
 import { test_function } from '../llm/function_test';
 
 // Request {{params}, {response body}, {request body}}
-interface llmRequest extends Request<{id : number}, {}, {user_input : string}> {}
+interface llmRequest extends Request<{ id: number }, {}, { user_input: string }> { }
 
 export const llmSubmit = async (req: llmRequest, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
         try {
             const { id } = req.params;
-            const { user_input } = req.body; 
+            const { user_input } = req.body;
             const llm_gen_function = await llmFunctionGeneration(user_input);
             const test_results = await test_function(llm_gen_function, id);
-            return res.status(200).json({ success: true,
+            return res.status(200).json({
+                success: true,
                 tests_passed: test_results.tests_passed,
                 tests_failed: test_results.total_tests,
                 llm_function: llm_gen_function.toString()
-             });
+            });
         } catch (e) {
-            return res.status(500).json({ success: false, message: e.toString() });
+            if (e instanceof Error) {
+                return res.status(500).json({ success: false, message: e.toString() });
+            } else {
+                return res.status(500).json({ success: false, message: 'An unknown error occurred' });
+            }
         }
     } else {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
@@ -36,7 +41,7 @@ export const getQuestionList = async (req: Request, res: Response, next: NextFun
     }
 };
 
-interface getQuestionRequest extends Request<{id : number}, {}, {}> {}
+interface getQuestionRequest extends Request<{ id: number }, {}, {}> { }
 
 export const getQuestion = async (req: getQuestionRequest, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
