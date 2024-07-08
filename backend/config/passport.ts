@@ -12,7 +12,7 @@ export const configurePassport = () => {
             try {
                 const user = await findUserByUsername(username);
                 if (!user) {
-                    return done(null, false, { message: 'Incorrect username.' });
+                    return done(null, false, { message: 'User not found.' });
                 }
                 const isValid = await verifyPassword(user, password);
                 if (!isValid) {
