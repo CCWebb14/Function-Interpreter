@@ -8,14 +8,8 @@ import { checkAuth } from '../../../util/auth';
 
 
 export default function Signup() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [firstName, setFirstName] = useState('tmp');
-    const [lastName, setLastName] = useState('tmp');
-    const [email, setEmail] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
     useEffect(() => {
         const authenticate = async () => {
             const isAuthenticated = await checkAuth();
@@ -25,6 +19,13 @@ export default function Signup() {
         };
         authenticate();
     }, [navigate]);
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('tmp');
+    const [lastName, setLastName] = useState('tmp');
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
 
     /*OLD SCHOOL WAY BUT GOOD FOR CLARITY, superseeded by Google.com's spread operator (see below)
     setFormData((prevFormData) => {

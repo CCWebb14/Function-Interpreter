@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { checkAuth } from '../../../util/auth';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../styles/login-signup.css';
 import TextField from '@mui/material/TextField';
 
 export default function Login() {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const authenticate = async () => {
+            const isAuthenticated = await checkAuth();
+            if (isAuthenticated) {
+                navigate('/dashboard');
+            }
+        };
+        authenticate();
+    }, [navigate]);
+
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const navigate = useNavigate();
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
