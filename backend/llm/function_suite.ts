@@ -20,7 +20,7 @@ export const Function_Suite_Map: { [id: number]: Function_Suite } = {
             { parameters: [0, 0], expected_result: 0 },
             { parameters: [-1, -3], expected_result: -4 },
             { parameters: [Number.MAX_VALUE, Number.MAX_VALUE], expected_result: Infinity },
-            { parameters: [Number.MIN_VALUE, Number.MIN_VALUE], expected_result: Infinity },
+            { parameters: [Number.MIN_SAFE_INTEGER, Number.NEGATIVE_INFINITY], expected_result: -Infinity },
         ],
         test_count: 5,
     },
