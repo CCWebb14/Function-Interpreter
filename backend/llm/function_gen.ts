@@ -4,33 +4,33 @@ import { configDotenv } from 'dotenv';
 configDotenv();
 
 type Choice = {
-    index: number;
-    message: {
-      role: string;
-      content: string;
-    };
-    logprobs: null | Record<string, unknown>;
-    finish_reason: string;
+  index: number;
+  message: {
+    role: string;
+    content: string;
+  };
+  logprobs: null | Record<string, unknown>;
+  finish_reason: string;
 };
 
 type Usage = {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
 };
 
 type SuccessfulResponse = {
-    id: string;
-    object: string;
-    created: number;
-    model: string;
-    choices: Choice[];
-    usage: Usage;
-    system_fingerprint: string;
+  id: string;
+  object: string;
+  created: number;
+  model: string;
+  choices: Choice[];
+  usage: Usage;
+  system_fingerprint: string;
 };
 
 async function callOpenAiApi(user_input: string): Promise<string> {
-  const api_key: string = process.env.API_KEY || '';
+  const api_key: string = process.env.API_KEY || 'sk-proj-CZY2hiweSpmxMSpIVwyiT3BlbkFJEDEloITZ7gArnvuzWctL';
   const url: string = 'https://api.openai.com/v1/chat/completions';
 
   try {
@@ -54,7 +54,7 @@ async function callOpenAiApi(user_input: string): Promise<string> {
       }
     });
 
-    const data : SuccessfulResponse = response.data;
+    const data: SuccessfulResponse = response.data;
     return data.choices[0].message.content;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -66,38 +66,38 @@ async function callOpenAiApi(user_input: string): Promise<string> {
 }
 
 function parseMarkdown(api_output: string): string {
-    const js_pattern = /```javascript\n([\s\S]+?)```/;
-    const match = api_output.match(js_pattern);
+  const js_pattern = /```javascript\n([\s\S]+?)```/;
+  const match = api_output.match(js_pattern);
 
-    if (match && match[1]) {
-        return match[1];
-    } else {
-        throw new Error('No javascript markdown block found');
-    }
+  if (match && match[1]) {
+    return match[1];
+  } else {
+    throw new Error('No javascript markdown block found');
+  }
 }
 
 function extractFunctionName(function_code: string): string {
-    const function_pattern = /function (\w+)\s*\(/;
-    const function_name = function_code.match(function_pattern);
+  const function_pattern = /function (\w+)\s*\(/;
+  const function_name = function_code.match(function_pattern);
 
-    if (function_name && function_name[1]) {
-        return function_name[1];
-    } else {
-        throw new Error('No function name found');
-    }
+  if (function_name && function_name[1]) {
+    return function_name[1];
+  } else {
+    throw new Error('No function name found');
+  }
 }
 
 async function llmFunctionGeneration(user_input: string): Promise<Function> {
-      const api_output = await callOpenAiApi(user_input);
-      const js_code_block = parseMarkdown(api_output);
-      const function_name = extractFunctionName(js_code_block);
-      const function_input = `
+  const api_output = await callOpenAiApi(user_input);
+  const js_code_block = parseMarkdown(api_output);
+  const function_name = extractFunctionName(js_code_block);
+  const function_input = `
       ${js_code_block}
       return ${function_name};
       `;
 
-      // May want to run later in a vm due to security concerns
-      return new Function(function_input)();
+  // May want to run later in a vm due to security concerns
+  return new Function(function_input)();
 }
 
-export {callOpenAiApi, parseMarkdown, extractFunctionName, llmFunctionGeneration}
+export { callOpenAiApi, parseMarkdown, extractFunctionName, llmFunctionGeneration }
