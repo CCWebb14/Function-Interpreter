@@ -1,19 +1,24 @@
 import { Function_Suite_Map, Function_Test, Function_Suite } from "./function_suite";
 
 export type test_results = {
-    tests_passed : number;
-    total_tests : number;
+    tests_passed: number;
+    total_tests: number;
+    failed_tests: number[];
 }
 
-export const test_function = (llm_gen_function : Function, id : number) : test_results => {
-    let pass_count : number = 0;
-    let test_suite : Function_Suite = Function_Suite_Map[id];
+export const test_function = (llm_gen_function: Function, id: number): test_results => {
+    let pass_count: number = 0;
+    let test_suite: Function_Suite = Function_Suite_Map[id];
+    let failed_tests: number[] = [];
+
 
     for (let i = 0; i < test_suite.test_count; i++) {
-        const current_test : Function_Test = test_suite.tests[i];
+        const current_test: Function_Test = test_suite.tests[i];
         try {
             if (llm_gen_function(...(current_test.parameters)) == current_test.expected_result) {
                 pass_count++;
+            } else {
+                failed_tests.push(i);  // Record the index of the failed test
             }
         } catch (error) {
             // The llm generated function encountered an error
@@ -23,6 +28,7 @@ export const test_function = (llm_gen_function : Function, id : number) : test_r
 
     return {
         tests_passed: pass_count,
-        total_tests: test_suite.test_count
+        total_tests: test_suite.test_count,
+        failed_tests: failed_tests
     };
 };

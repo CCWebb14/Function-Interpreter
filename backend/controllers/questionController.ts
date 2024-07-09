@@ -17,6 +17,7 @@ export const llmSubmit = async (req: llmRequest, res: Response, next: NextFuncti
                 success: true,
                 tests_passed: test_results.tests_passed,
                 tests_failed: test_results.total_tests,
+                failed_tests: test_results.failed_tests,
                 llm_function: llm_gen_function.toString()
             });
         } catch (e) {

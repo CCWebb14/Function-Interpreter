@@ -14,6 +14,7 @@ const initialState = {
     success: '',
     tests_passed: '',
     tests_failed: '',
+    failed_tests: [],
     llm_function: '',
     returned: false,
     complete_success: false,
@@ -24,6 +25,7 @@ interface StateType {
     tests_passed: string;
     tests_failed: string;
     llm_function: string;
+    failed_tests: number[];
     returned: boolean;
     complete_success: boolean;
 }
@@ -43,6 +45,7 @@ type response = {
         success: string;
         tests_passed: string;
         tests_failed: string;
+        failed_tests: number[];
         llm_function: string;
     }
 }
@@ -53,79 +56,82 @@ export default function Question() {
     const [submitError, setSubmitError] = useState<SubmitErrorStateType>(submitErrorInitialState);
     const { id } = useParams();
     const { questionFetchState, loading, error, setIsLoadingMore } =
-    useQuestionFetch(id);
+        useQuestionFetch(id);
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
 
         try {
-            const axios_response : response = await axios.post(`http://localhost:4001/api/question/submit/${id}`, {
+            const axios_response: response = await axios.post(`http://localhost:4001/api/question/submit/${id}`, {
                 user_input
-        });
+            });
             if (axios_response.data.success) {
                 setState({
-                    success : axios_response.data.success,
-                    tests_passed : axios_response.data.tests_passed,
-                    tests_failed : axios_response.data.tests_failed,
-                    llm_function : axios_response.data.llm_function,
-                    returned : true,
-                    complete_success : (axios_response.data.tests_passed === axios_response.data.tests_failed)
+                    success: axios_response.data.success,
+                    tests_passed: axios_response.data.tests_passed,
+                    tests_failed: axios_response.data.tests_failed,
+                    failed_tests: axios_response.data.failed_tests,
+                    llm_function: axios_response.data.llm_function,
+                    returned: true,
+                    complete_success: (axios_response.data.tests_passed === axios_response.data.tests_failed)
                 });
                 setSubmitError(submitErrorInitialState);
             } else {
                 setSubmitError({
-                    errorMsg : 'Server connection failed. Please try again.',
-                    error : true,
+                    errorMsg: 'Server connection failed. Please try again.',
+                    error: true,
                 });
             }
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 setSubmitError({
-                    errorMsg : 'Make sure no Javascript syntax is present. Please rephrase and try again.',
-                    error : true,
+                    errorMsg: 'Make sure no Javascript syntax is present. Please rephrase and try again.',
+                    error: true,
                 });
             } else {
                 setSubmitError({
-                    errorMsg : 'An unexpected error occured. Please try again.',
-                    error : true,
+                    errorMsg: 'An unexpected error occured. Please try again.',
+                    error: true,
                 });
             }
         }
 
-        
+
     };
 
     let alertContent;
 
     if (submitError.error) {
         alertContent =
-        (<Alert severity="error">
-            <AlertTitle>Warning</AlertTitle>
+            (<Alert severity="error">
+                <AlertTitle>Warning</AlertTitle>
                 {submitError.errorMsg}
-        </Alert>)
+            </Alert>)
     } else if (state.complete_success) {
         alertContent =
-        (<Alert severity="success">
-            <AlertTitle>Success</AlertTitle>
+            (<Alert severity="success">
+                <AlertTitle>Success</AlertTitle>
                 {`Tests passed: ${state.tests_passed}/${state.tests_failed}`}
-        </Alert>)
+            </Alert>)
     } else if (state.returned) {
-        alertContent = 
-        (<Alert severity="error" color='warning'>
-            <AlertTitle>Incorrect</AlertTitle>
-            {`Tests passed: ${state.tests_passed}/${state.tests_failed}`}
-        </Alert>)
+        alertContent =
+            (<Alert severity="error" color='warning'>
+                <AlertTitle>Incorrect</AlertTitle>
+                {`Tests passed: ${state.tests_passed}/${state.tests_failed}`}
+                <br />
+                {`Failed test(s): ${state.failed_tests.map(index => index + 1).join(', ')}`}
+            </Alert>)
     } else {
         alertContent = null;
     }
 
-    return(
+    return (
         <div className='question-container'>
             <div className='box-container-out'>
                 <div className='box'>
                     <div className='question-header'>Output</div>
-                    <SyntaxHighlighter  language="javascript" showLineNumbers style={dark}
-                    customStyle={{display:'flex', width:'100%',  flex: 1, padding: 0}} >
+                    <SyntaxHighlighter language="javascript" showLineNumbers style={dark}
+                        customStyle={{ display: 'flex', width: '100%', flex: 1, padding: 0 }} >
                         {state.llm_function}
                     </SyntaxHighlighter>
                 </div>
@@ -133,8 +139,8 @@ export default function Question() {
             <div className='box-container-q'>
                 <div className='box'>
                     <div className='question-header'>Question #{id}</div>
-                    <SyntaxHighlighter  language="javascript" showLineNumbers
-                    customStyle={{display:'flex', width:'100%', flex: 1, padding: 0}} >
+                    <SyntaxHighlighter language="javascript" showLineNumbers
+                        customStyle={{ display: 'flex', width: '100%', flex: 1, padding: 0 }} >
                         {questionFetchState.results}
                     </SyntaxHighlighter>
                     <TextField
@@ -145,7 +151,7 @@ export default function Question() {
                         variant="filled"
                         fullWidth
                         required
-                        sx={{display : 'flex'}}
+                        sx={{ display: 'flex' }}
                         onChange={
                             (e) => setUserInput(e.target.value)
                         }
