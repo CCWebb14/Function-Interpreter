@@ -14,19 +14,20 @@ export interface Function_Suite {
 export const Function_Suite_Map: { [id: number]: Function_Suite } = {
     0: {
         // sum function 
-        function_string: "function foo(a, b) {\nreturn (a + b);\n}",
+        function_string: "function foo(a, b) {\n\treturn (a + b);\n}",
         tests: [
             { parameters: [1, 2], expected_result: 3 },
             { parameters: [0, 0], expected_result: 0 },
             { parameters: [-1, -3], expected_result: -4 },
-            { parameters: [Number.MAX_VALUE, Number.MAX_VALUE], expected_result: Infinity },
-            { parameters: [Number.MIN_SAFE_INTEGER, Number.NEGATIVE_INFINITY], expected_result: -Infinity },
+            { parameters: [-2, 4], expected_result: 2 },
+            { parameters: [1000000, 2000000], expected_result: 3000000 },
+            { parameters: [1.5, 2.5], expected_result: 4.0 },
         ],
-        test_count: 5,
+        test_count: 6,
     },
     1: {
         // isEven function 
-        function_string: "function boo(num) {\nreturn num % 2 === 0;\n}",
+        function_string: "function boo(num) {\n\treturn num % 2 === 0;\n}",
         tests: [
             { parameters: [4], expected_result: true },
             { parameters: [5], expected_result: false },
@@ -39,7 +40,7 @@ export const Function_Suite_Map: { [id: number]: Function_Suite } = {
     },
     2: {
         // max function 
-        function_string: "function loo(a,b) {\nreturn a >b ? a: b;\n}",
+        function_string: "function loo(a,b) {\n\treturn a >b ? a: b;\n}",
         tests: [
             { parameters: [1, 4], expected_result: 4 },
             { parameters: [Number.MAX_VALUE, 2], expected_result: Number.MAX_VALUE },
@@ -51,7 +52,7 @@ export const Function_Suite_Map: { [id: number]: Function_Suite } = {
     },
     3: {
         // firstInstance function 
-        function_string: "function doo(arr,num) {\nreturn arr.indexOf(num);\n}",
+        function_string: "function doo(arr,num) {\n\treturn arr.indexOf(num);\n}",
         tests: [
             { parameters: [[1, 2, 3, 4], 1], expected_result: 0 },
             { parameters: [[1, 1, 2, 3], 1], expected_result: 0 },
