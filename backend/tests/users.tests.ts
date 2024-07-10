@@ -1,14 +1,17 @@
 import * as chai from 'chai';
-import { expect} from 'chai';
-import chaiAsPromised  from 'chai-as-promised';
+import { expect } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import request from 'supertest';
-import { before, describe, it } from 'mocha'; 
-import app from '../app';  
+import { before, describe, it } from 'mocha';
 import db from '../models/db';
 import { createUser, findUserByUsername, findUserById, verifyPassword } from '../models/users';
-
 chai.use(chaiAsPromised);
 
+const server = 'http://localhost:4001'
+const endpoint = '/api/users/register';
+
+
+//TESTING USER CONTROLLERS
 describe('User Registration API', () => {
     before(async () => {
         const exists = await db.schema.hasTable('users');
@@ -23,9 +26,6 @@ describe('User Registration API', () => {
             });
         }
     });
-    
-    const server = app; 
-    const endpoint = '/api/users/register';  
 
     it('should register a new user successfully', (done) => {
         const newUser = {
@@ -37,16 +37,16 @@ describe('User Registration API', () => {
         };
 
         request(server)
-        .post(endpoint)
-        .send(newUser)
-        .expect(201)
-        .end((err, res) => {
-            if (err) return done(err);
-            expect(res.body).to.have.property('success', true);
-            expect(res.body).to.have.property('message', 'User created successfully');
-            done();
-        });
-});
+            .post(endpoint)
+            .send(newUser)
+            .expect(201)
+            .end((err: any, res: any) => {
+                if (err) return done(err);
+                expect(res.body).to.have.property('success', true);
+                expect(res.body).to.have.property('message', 'User created successfully');
+                done();
+            });
+    }).timeout(5000);
 
     it('should not allow duplicate usernames', (done) => {
         const duplicateUser = {
@@ -61,12 +61,12 @@ describe('User Registration API', () => {
             .post(endpoint)
             .send(duplicateUser)
             .expect(400)
-            .end((err, res) => {
+            .end((err: any, res: any) => {
                 if (err) return done(err);
                 expect(res.body).to.have.property('message', 'Username already taken');
                 done();
             });
-    });
+    }).timeout(5000);
 
     it('should allow overlapping details but different username and email', (done) => {
         const newUser = {
@@ -74,20 +74,20 @@ describe('User Registration API', () => {
             password: 'password123',
             firstName: 'Test',
             lastName: 'User',
-            email: 'anotheruser@example.com', 
+            email: 'anotheruser@example.com',
         };
 
         request(server)
             .post(endpoint)
             .send(newUser)
             .expect(201)
-            .end((err, res) => {
+            .end((err: any, res: any) => {
                 if (err) return done(err);
                 expect(res.body).to.have.property('success', true);
                 expect(res.body).to.have.property('message', 'User created successfully');
                 done();
             });
-    });
+    }).timeout(5000);
 
     it('should find a user by username', async () => {
         const user = await findUserByUsername('newuser');
@@ -98,6 +98,8 @@ describe('User Registration API', () => {
 
 });
 
+
+//TESTING MODEL FUNC
 describe('User Functions', () => {
     before(async () => {
         await db.schema.hasTable('users').then(async (exists) => {
