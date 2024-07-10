@@ -21,9 +21,6 @@ async function testDatabaseConnection() {
         await db.schema.dropTable('test_table');
         console.log('Table dropped successfully.');
 
-        // Close the database connection
-        await db.destroy();
-        console.log('Database connection closed.');
     } catch (error) {
         console.error('Error:', error);
     }

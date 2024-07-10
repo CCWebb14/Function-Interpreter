@@ -32,3 +32,6 @@ _Note: any modifications made to TypeScript source files will be automatically d
 ```sh
 docker compose down
 ```
+
+## Test Suite
+All tests located in: Projects-Groups-02-Lab-B/backend/tests
