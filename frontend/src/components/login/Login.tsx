@@ -36,7 +36,7 @@ export default function Login() {
 
             if (response.data.success) {
                 // TODO: Change to dashboard when complete
-                navigate('/dashboard');
+                navigate('/questions');
             } else {
                 setError(response.data.message || 'Login failed');
             }

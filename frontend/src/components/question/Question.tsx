@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { useQuestionFetch } from '../../hooks/useQuestionFetch';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const initialState = {
     success: '',
@@ -57,11 +58,13 @@ export default function Question() {
     const { id } = useParams();
     const { questionFetchState, loading, error, setIsLoadingMore } =
         useQuestionFetch(id);
+    const [submissionLoading, setSubmissionLoading] = useState(false);
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
 
         try {
+            setSubmissionLoading(true);
             const axios_response: response = await axios.post(`http://localhost:4001/api/question/submit/${id}`, {
                 user_input
             });
@@ -95,7 +98,7 @@ export default function Question() {
                 });
             }
         }
-
+        setSubmissionLoading(false);
 
     };
 
@@ -158,7 +161,9 @@ export default function Question() {
                     />
                     <div className='footer'>
                         <div className='spacer'></div>
-                        {alertContent}
+                        {submissionLoading ? 
+                        (<CircularProgress color="secondary" />) :
+                        (<>{alertContent}</>) }
                         <div onClick={handleSubmit} className="submit-button">Submit</div>
                     </div>
                 </div>
