@@ -34,4 +34,15 @@ docker compose down
 ```
 
 ## Test Suite
+_Note: In order to run all the tests provided, the assumption is made that the containers are built and the servers are running
+Please then exec the [npm run test] from the backend docker container_.
+
 All tests located in: Projects-Groups-02-Lab-B/backend/tests
+
+
+#### Running commands from docker container
+After containers have been built and started:
+docker ps [To look at all container IDS]
+docker exec -it <containerID of backend from above> npm run test
+
+
