@@ -43,7 +43,7 @@ All tests located in: Projects-Groups-02-Lab-B/backend/tests
 ## Running commands from Docker containers
 After containers have been built and started:  
 docker ps [To look at all container IDS]  
-docker exec -it <containerID of backend from above> npm run test
+docker exec -it `<ContainerID from above>` npm run test
 
 
 
