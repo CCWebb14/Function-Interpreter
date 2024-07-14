@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../../styles/app.css'
-import '../../styles/question.css'
+import '../../styles/app.css';
+import '../../styles/question.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import TextField from '@mui/material/TextField';
@@ -51,14 +51,26 @@ type response = {
     }
 }
 
+const hints: { [key: number]: string } = {
+    0: "What operation is being performed?",
+    1: "What does a modulus operation returning 0 mean? ",
+    2: "How does the question result impact the function’s subsequent output? ",
+    3: "What does indexOf return?",
+    4: "What makes count go up? "
+};
+
 export default function Question() {
     const [user_input, setUserInput] = useState('');
     const [state, setState] = useState<StateType>(initialState);
     const [submitError, setSubmitError] = useState<SubmitErrorStateType>(submitErrorInitialState);
-    const { id } = useParams();
-    const { questionFetchState, loading, error, setIsLoadingMore } =
-        useQuestionFetch(id);
+    const { id } = useParams<{ id: string }>();
+    const { questionFetchState, loading, error, setIsLoadingMore } = useQuestionFetch(id);
     const [submissionLoading, setSubmissionLoading] = useState(false);
+    const [showHint, setShowHint] = useState(false);
+
+    if (!id) {
+        return <div>Error: Question ID is missing.</div>;
+    }
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
@@ -93,13 +105,16 @@ export default function Question() {
                 });
             } else {
                 setSubmitError({
-                    errorMsg: 'An unexpected error occured. Please try again.',
+                    errorMsg: 'An unexpected error occurred. Please try again.',
                     error: true,
                 });
             }
         }
         setSubmissionLoading(false);
+    };
 
+    const toggleHint = () => {
+        setShowHint(!showHint);
     };
 
     let alertContent;
@@ -146,6 +161,8 @@ export default function Question() {
                         customStyle={{ display: 'flex', width: '100%', flex: 1, padding: 0 }} >
                         {questionFetchState.results}
                     </SyntaxHighlighter>
+                    <button onClick={toggleHint} className="hint-button">Show Hint</button>
+                    {showHint && <p className="hint">{hints[parseInt(id, 10)]}</p>}
                     <TextField
                         id="standard-multiline-static"
                         label="Interpretation"
