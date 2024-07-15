@@ -6,13 +6,13 @@ import { registerAttempt } from '../models/attempt';
 import { User } from '../models/users';
 
 // Request {{params}, {response body}, {request body}}
-interface llmRequest extends Request<{ id: number }, {}, { user_input: string }> { }
+interface llmRequest extends Request<{ id: number }, {}, { user_input: string, time: number, hint_used: boolean }> { }
 
 export const llmSubmit = async (req: llmRequest, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
         try {
             const { id: questionID } = req.params;
-            const { user_input } = req.body;
+            const { user_input, time, hint_used } = req.body;
 
             //Type bypass for passport without further extending req
             const user = req.user as User;
@@ -27,8 +27,8 @@ export const llmSubmit = async (req: llmRequest, res: Response, next: NextFuncti
                 questionID,
                 score: test_results.tests_passed,
                 maxScore: test_results.total_tests,
-                timeTaken: 0, ///Based on hook
-                hintUsed: false //Based on hook here
+                timeTaken: time, 
+                hintUsed: hint_used 
             });
 
             return res.status(200).json({
