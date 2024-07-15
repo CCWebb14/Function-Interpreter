@@ -78,7 +78,8 @@ export default function Question() {
         try {
             setSubmissionLoading(true);
             const axios_response: response = await axios.post(`http://localhost:4001/api/question/submit/${id}`, {
-                user_input
+                user_input,
+                showHint 
             });
             if (axios_response.data.success) {
                 setState({

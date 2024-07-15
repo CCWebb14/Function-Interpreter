@@ -4,7 +4,7 @@ import { Function_Suite_Map } from '../llm/function_suite';
 import { test_function } from '../llm/function_test';
 
 // Request {{params}, {response body}, {request body}}
-interface llmRequest extends Request<{ id: number }, {}, { user_input: string }> { }
+interface llmRequest extends Request<{ id: number }, {}, { user_input: string, showHint: boolean}> { }
 
 export const llmSubmit = async (req: llmRequest, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
