@@ -1,0 +1,23 @@
+-- sqlite3 query to create tables
+
+-- Create user table if it doesn't exist
+CREATE TABLE IF NOT EXISTS users (
+    userID INTEGER PRIMARY KEY,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    firstName TEXT,
+    lastName TEXT,
+    email TEXT
+);
+
+-- Attempts  table
+CREATE TABLE IF NOT EXISTS attempts (
+    attemptID INTEGER PRIMARY KEY AUTOINCREMENT,
+    userID INTEGER NOT NULL,
+    questionID INTEGER NOT NULL,
+    score INTEGER NOT NULL,
+    maxScore INTEGER NOT NULL,
+    timeTaken INTEGER NOT NULL,
+    hintUsed BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);

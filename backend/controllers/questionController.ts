@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { llmFunctionGeneration } from '../llm/function_gen';
 import { Function_Suite_Map } from '../llm/function_suite';
 import { test_function } from '../llm/function_test';
+import { registerAttempt } from '../models/attempt';
+import { User } from '../models/users';
 
 // Request {{params}, {response body}, {request body}}
 interface llmRequest extends Request<{ id: number }, {}, { user_input: string }> { }
@@ -9,10 +11,26 @@ interface llmRequest extends Request<{ id: number }, {}, { user_input: string }>
 export const llmSubmit = async (req: llmRequest, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
         try {
-            const { id } = req.params;
+            const { id: questionID } = req.params;
             const { user_input } = req.body;
+
+            //Type bypass for passport without further extending req
+            const user = req.user as User;
+            const userID = user.userID;
+
             const llm_gen_function = await llmFunctionGeneration(user_input);
-            const test_results = await test_function(llm_gen_function, id);
+            const test_results = await test_function(llm_gen_function, questionID);
+
+            //NOTE: surround registerAttempt with its own try/catch if we want it to keep going
+            await registerAttempt({
+                userID,
+                questionID,
+                score: test_results.tests_passed,
+                maxScore: test_results.total_tests,
+                timeTaken: 0, ///Based on hook
+                hintUsed: false //Based on hook here
+            });
+
             return res.status(200).json({
                 success: true,
                 tests_passed: test_results.tests_passed,
@@ -22,7 +40,11 @@ export const llmSubmit = async (req: llmRequest, res: Response, next: NextFuncti
             });
         } catch (e) {
             if (e instanceof Error) {
-                return res.status(500).json({ success: false, message: e.toString() });
+                if (e.message === 'Failed to register attempt on DB') {
+                    return res.status(500).json({ success: false, message: 'Fail to register on DB' });
+                } else {
+                    return res.status(500).json({ success: false, message: e.message });
+                }
             } else {
                 return res.status(500).json({ success: false, message: 'An unknown error occurred' });
             }

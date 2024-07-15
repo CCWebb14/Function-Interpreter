@@ -1,7 +1,7 @@
 import db from './db';
 
 // Define the User type (adjust according to your actual user schema)
-interface User {
+export interface User {
     userID: number;
     username: string;
     password: string;

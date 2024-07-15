@@ -56,8 +56,7 @@ export default function Question() {
     const [state, setState] = useState<StateType>(initialState);
     const [submitError, setSubmitError] = useState<SubmitErrorStateType>(submitErrorInitialState);
     const { id } = useParams();
-    const { questionFetchState, loading, error, setIsLoadingMore } =
-        useQuestionFetch(id);
+    const { questionFetchState, loading, error } = useQuestionFetch(id);
     const [submissionLoading, setSubmissionLoading] = useState(false);
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -161,9 +160,9 @@ export default function Question() {
                     />
                     <div className='footer'>
                         <div className='spacer'></div>
-                        {submissionLoading ? 
-                        (<CircularProgress color="secondary" />) :
-                        (<>{alertContent}</>) }
+                        {submissionLoading ?
+                            (<CircularProgress color="secondary" />) :
+                            (<>{alertContent}</>)}
                         <div onClick={handleSubmit} className="submit-button">Submit</div>
                     </div>
                 </div>
