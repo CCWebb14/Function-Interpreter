@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { llmFunctionGeneration } from '../llm/function_gen';
 import { Function_Suite_Map } from '../llm/function_suite';
 import { test_function } from '../llm/function_test';
-import { registerAttempt } from './attemptController';
+import { registerAttempt } from '../models/attempt';
 import { User } from '../models/users';
 
 // Request {{params}, {response body}, {request body}}
@@ -26,6 +26,7 @@ export const llmSubmit = async (req: llmRequest, res: Response, next: NextFuncti
                 userID,
                 questionID,
                 score: test_results.tests_passed,
+                maxScore: test_results.total_tests,
                 timeTaken: 0, ///Based on hook
                 hintUsed: false //Based on hook here
             });

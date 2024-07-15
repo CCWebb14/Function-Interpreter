@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS attempts (
     userID INTEGER NOT NULL,
     questionID INTEGER NOT NULL,
     score INTEGER NOT NULL,
+    maxScore INTEGER NOT NULL,
     timeTaken INTEGER NOT NULL,
     hintUsed BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (userID) REFERENCES users(userID)
