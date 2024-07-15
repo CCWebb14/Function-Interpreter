@@ -10,6 +10,7 @@ import { useQuestionFetch } from '../../hooks/useQuestionFetch';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useTimer } from 'use-timer';
 
 const initialState = {
     success: '',
@@ -58,6 +59,11 @@ export default function Question() {
     const { id } = useParams();
     const { questionFetchState, loading, error } = useQuestionFetch(id);
     const [submissionLoading, setSubmissionLoading] = useState(false);
+    const { time, start, reset } = useTimer({
+        autostart: true,
+    });
+    // TODO: remove hintUsed stub for implementation
+    const [ hint_used ] = useState(false);
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
@@ -65,7 +71,9 @@ export default function Question() {
         try {
             setSubmissionLoading(true);
             const axios_response: response = await axios.post(`http://localhost:4001/api/question/submit/${id}`, {
-                user_input
+                user_input, 
+                time,
+                hint_used
             });
             if (axios_response.data.success) {
                 setState({
@@ -78,6 +86,9 @@ export default function Question() {
                     complete_success: (axios_response.data.tests_passed === axios_response.data.tests_failed)
                 });
                 setSubmitError(submitErrorInitialState);
+                // Only reset question timer on successful response
+                reset();
+                start();
             } else {
                 setSubmitError({
                     errorMsg: 'Server connection failed. Please try again.',
