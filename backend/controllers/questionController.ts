@@ -10,7 +10,8 @@ export const llmSubmit = async (req: llmRequest, res: Response, next: NextFuncti
     if (req.isAuthenticated()) {
         try {
             const { id } = req.params;
-            const { user_input } = req.body;
+            const { user_input } = req.body.user_input;
+            const { hint_status } = req.body.showHint; 
             const llm_gen_function = await llmFunctionGeneration(user_input);
             const test_results = await test_function(llm_gen_function, id);
             return res.status(200).json({
