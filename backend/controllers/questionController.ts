@@ -69,8 +69,13 @@ interface getQuestionRequest extends Request<{ id: number }, {}, {}> { }
 export const getQuestion = async (req: getQuestionRequest, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
         const { id } = req.params;
-        const question_string = Function_Suite_Map[id].function_string;
-        return res.status(200).json({ success: true, message: question_string });
+        const test_suite = Function_Suite_Map[id];
+
+        return res.status(200).json({
+            success: true,
+            function_string: test_suite.function_string,
+            hint: test_suite.hint,
+        });
     } else {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
     }

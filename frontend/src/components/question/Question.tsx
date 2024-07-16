@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../../styles/app.css'
-import '../../styles/question.css'
+import '../../styles/app.css';
+import '../../styles/question.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import TextField from '@mui/material/TextField';
@@ -56,14 +56,17 @@ export default function Question() {
     const [user_input, setUserInput] = useState('');
     const [state, setState] = useState<StateType>(initialState);
     const [submitError, setSubmitError] = useState<SubmitErrorStateType>(submitErrorInitialState);
-    const { id } = useParams();
-    const { questionFetchState, loading, error } = useQuestionFetch(id);
+    const { id } = useParams<{ id: string }>();
+    const { questionFetchState } = useQuestionFetch(id);
     const [submissionLoading, setSubmissionLoading] = useState(false);
     const { time, start, reset } = useTimer({
         autostart: true,
     });
-    // TODO: remove hintUsed stub for implementation
-    const [ hint_used ] = useState(false);
+    const [ hint_used, setHintUsed ] = useState(false);
+
+    if (!id) {
+        return <div>Error: Question ID is missing.</div>;
+    }
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
@@ -103,13 +106,16 @@ export default function Question() {
                 });
             } else {
                 setSubmitError({
-                    errorMsg: 'An unexpected error occured. Please try again.',
+                    errorMsg: 'An unexpected error occurred. Please try again.',
                     error: true,
                 });
             }
         }
         setSubmissionLoading(false);
+    };
 
+    const toggleHint = () => {
+        setHintUsed(!hint_used);
     };
 
     let alertContent;
@@ -154,8 +160,12 @@ export default function Question() {
                     <div className='question-header'>Question #{id}</div>
                     <SyntaxHighlighter language="javascript" showLineNumbers
                         customStyle={{ display: 'flex', width: '100%', flex: 1, padding: 0 }} >
-                        {questionFetchState.results}
+                        {questionFetchState.function_string}
                     </SyntaxHighlighter>
+                    <div className='hint-container'>
+                        <button onClick={toggleHint} className="hint-button">Show Hint</button>
+                        {hint_used && <div className="hint">{questionFetchState.hint}</div>}
+                    </div>
                     <TextField
                         id="standard-multiline-static"
                         label="Interpretation"

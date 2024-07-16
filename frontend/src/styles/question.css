@@ -84,3 +84,33 @@
 .MuiOutlinedInput-root {
     flex: 1;
 }
+
+.hint-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.hint-button {
+    margin: 0 25px;
+    padding: 8px 16px;
+    background-color: #7986CB;
+    color: #FFF;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.hint-button:hover {
+    background-color: #1A237E;
+}
+
+.hint {
+    padding: 8px 12px;
+    background-color: #f1f1f1;
+    border-left: 5px solid #7986CB;
+    font-size: 14px;
+    color: #333;
+}
