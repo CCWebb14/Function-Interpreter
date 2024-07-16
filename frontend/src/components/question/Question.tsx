@@ -162,8 +162,10 @@ export default function Question() {
                         customStyle={{ display: 'flex', width: '100%', flex: 1, padding: 0 }} >
                         {questionFetchState.function_string}
                     </SyntaxHighlighter>
-                    <button onClick={toggleHint} className="hint-button">Show Hint</button>
-                    {hint_used && <p className="hint">{questionFetchState.hint}</p>}
+                    <div className='hint-container'>
+                        <button onClick={toggleHint} className="hint-button">Show Hint</button>
+                        {hint_used && <div className="hint">{questionFetchState.hint}</div>}
+                    </div>
                     <TextField
                         id="standard-multiline-static"
                         label="Interpretation"
