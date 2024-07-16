@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/login-signup.css';
 import TextField from '@mui/material/TextField';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../navbar/Navbar';
 import { checkAuth } from '../../../util/auth';
 
 
 export default function Signup() {
 
     const navigate = useNavigate();
+
     useEffect(() => {
         const authenticate = async () => {
             const isAuthenticated = await checkAuth();
@@ -25,7 +28,11 @@ export default function Signup() {
     const [firstName, setFirstName] = useState('tmp');
     const [lastName, setLastName] = useState('tmp');
     const [email, setEmail] = useState('');
-    const [error, setError] = useState('');
+    const [message, setMessage] = useState(''); // Define the message state
+    const [consent, setConsent] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [hasOpenedModal, setHasOpenedModal] = useState(false);
+
 
     /*OLD SCHOOL WAY BUT GOOD FOR CLARITY, superseeded by Google.com's spread operator (see below)
     setFormData((prevFormData) => {
@@ -51,16 +58,30 @@ export default function Signup() {
           updatedFormData.email = value;
         }*/
 
-    const [message, setMessage] = useState(''); // Define the message state
+    //MaterialUI Modal
+    // Function to open the modal
+    const handleOpen = () => {
+        setModalOpen(true);
+    };
+
+    // Function to close the modal
+    const handleClose = () => {
+        setModalOpen(false);
+        setHasOpenedModal(true);
+    };
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
+
+        if (!consent) {
+            setMessage('Please read our T&C.');
+            return;
+        }
+
         const formData = { username, password, firstName, lastName, email }
 
         try {
-            const response = await axios.post('http://localhost:4001/api/users/register',
-                formData
-            );
+            await axios.post('http://localhost:4001/api/users/register', formData);
             setMessage('You have successfully registered!');
         } catch (err) {
             if (axios.isAxiosError(err)) {
@@ -68,7 +89,6 @@ export default function Signup() {
                     setMessage('Username already taken');
                 } else if (err.response && err.response.status === 401) {
                     setMessage('Email already taken');
-
                 } else {
                     setMessage('Error creating user');
                 }
@@ -97,7 +117,37 @@ export default function Signup() {
                     <TextField label="Email" variant="outlined" size="medium" fullWidth required onChange={
                         (e) => setEmail(e.target.value)
                     } />
-                    <div onClick={handleSubmit} className="button">Sign up</div>
+                    <div className='consent-checkbox'>
+                        <Modal
+                            open={modalOpen}
+                            onClose={handleClose}
+                            aria-labelledby="terms-modal-title"
+                            aria-describedby="terms-modal-description"
+                        >
+                            <Box className="modal-style">
+                                <Typography id="terms-modal-title" variant="h6" align="center">
+                                    Terms and Conditions
+                                </Typography>
+                                {/*https://mui.com/material-ui/api/typography/*/}
+                                <Typography id="terms-modal-description" variant="body1" gutterBottom>
+                                    {/* T&C here*/}
+                                    1) WIP <br />
+                                    2) WIP
+                                </Typography>
+                            </Box>
+                        </Modal>
+                        <input
+                            type="checkbox"
+                            id="consent"
+                            checked={consent}
+                            onChange={(e) => setConsent(e.target.checked)}
+                            disabled={!hasOpenedModal}
+                        />
+                        <label htmlFor="consent">I agree to the <span onClick={handleOpen} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>terms and conditions</span></label>
+                    </div>
+                    <div onClick={consent ? handleSubmit : undefined}
+                        className={`button ${!consent ? 'button-disabled' : ''}`}
+                    >Sign up</div>
                     <div className='need-account-frame'>
                         <div className='need-account'>Have an account?</div>
                         <div className='join-now' onClick={handleNav}>Login here</div>
@@ -105,6 +155,6 @@ export default function Signup() {
                     <div className='error-field'>{message}</div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
