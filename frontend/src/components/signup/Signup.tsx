@@ -143,7 +143,7 @@ export default function Signup() {
                             onChange={(e) => setConsent(e.target.checked)}
                             disabled={!hasOpenedModal}
                         />
-                        <label htmlFor="consent">I agree to the <span onClick={handleOpen} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>terms and conditions</span></label>
+                        <label htmlFor="consent">  I agree to the <span onClick={handleOpen} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>terms and conditions</span></label>
                     </div>
                     <div onClick={consent ? handleSubmit : undefined}
                         className={`button ${!consent ? 'button-disabled' : ''}`}
