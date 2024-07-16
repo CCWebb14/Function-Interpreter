@@ -10,6 +10,7 @@ import { useQuestionFetch } from '../../hooks/useQuestionFetch';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useTimer } from 'use-timer';
 
 const initialState = {
     success: '',
@@ -64,9 +65,12 @@ export default function Question() {
     const [state, setState] = useState<StateType>(initialState);
     const [submitError, setSubmitError] = useState<SubmitErrorStateType>(submitErrorInitialState);
     const { id } = useParams<{ id: string }>();
-    const { questionFetchState, loading, error, setIsLoadingMore } = useQuestionFetch(id);
+    const { questionFetchState, loading, error } = useQuestionFetch(id);
     const [submissionLoading, setSubmissionLoading] = useState(false);
-    const [showHint, setShowHint] = useState(false);
+    const { time, start, reset } = useTimer({
+        autostart: true,
+    });
+    const [ hint_used, setHintUsed ] = useState(false);
 
     if (!id) {
         return <div>Error: Question ID is missing.</div>;
@@ -78,8 +82,9 @@ export default function Question() {
         try {
             setSubmissionLoading(true);
             const axios_response: response = await axios.post(`http://localhost:4001/api/question/submit/${id}`, {
-                user_input,
-                showHint 
+                user_input, 
+                time,
+                hint_used
             });
             if (axios_response.data.success) {
                 setState({
@@ -92,6 +97,9 @@ export default function Question() {
                     complete_success: (axios_response.data.tests_passed === axios_response.data.tests_failed)
                 });
                 setSubmitError(submitErrorInitialState);
+                // Only reset question timer on successful response
+                reset();
+                start();
             } else {
                 setSubmitError({
                     errorMsg: 'Server connection failed. Please try again.',
@@ -179,9 +187,9 @@ export default function Question() {
                     />
                     <div className='footer'>
                         <div className='spacer'></div>
-                        {submissionLoading ? 
-                        (<CircularProgress color="secondary" />) :
-                        (<>{alertContent}</>) }
+                        {submissionLoading ?
+                            (<CircularProgress color="secondary" />) :
+                            (<>{alertContent}</>)}
                         <div onClick={handleSubmit} className="submit-button">Submit</div>
                     </div>
                 </div>
