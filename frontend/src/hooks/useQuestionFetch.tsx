@@ -3,17 +3,20 @@ import axios from 'axios';
 
 // good to have an initial state to reset
 const initialState = {
-	results: '',
+	function_string: '',
+    hint: ''
 };
 
 interface StateType {
-    results: string;
+    function_string: string;
+    hint: string;
 }
 
 type response = {
     data: {
         success: string;
-        message: string;
+        function_string: string;
+        hint: string;
     }
 }
 
@@ -30,7 +33,8 @@ export const useQuestionFetch = (id: string | undefined) => {
             const res : response = await axios.get(`http://localhost:4001/api/question/id/${id}`)
 
             setQuestionFetchState(() => ({   
-                results : res.data.message
+                function_string : res.data.function_string,
+                hint: res.data.hint,
 			}));
         } catch (err) {
             setError(true);

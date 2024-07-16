@@ -9,6 +9,7 @@ export interface Function_Suite {
     function_string: string;
     tests: Function_Test[];
     test_count: number;
+    hint: string;
 }
 
 export const Function_Suite_Map: { [id: number]: Function_Suite } = {
@@ -24,6 +25,7 @@ export const Function_Suite_Map: { [id: number]: Function_Suite } = {
             { parameters: [1.5, 2.5], expected_result: 4.0 },
         ],
         test_count: 6,
+        hint: "What operation is being performed?",
     },
     1: {
         // isEven function 
@@ -37,6 +39,7 @@ export const Function_Suite_Map: { [id: number]: Function_Suite } = {
             { parameters: [2.2], expected_result: false },
         ],
         test_count: 6,
+        hint: "What does a modulus operation returning 0 mean?",
     },
     2: {
         // max function 
@@ -49,6 +52,7 @@ export const Function_Suite_Map: { [id: number]: Function_Suite } = {
             { parameters: [-3, 0], expected_result: 0 },
         ],
         test_count: 5,
+        hint: "How does the question result impact the function’s subsequent output?",
     },
     3: {
         // firstInstance function 
@@ -61,6 +65,7 @@ export const Function_Suite_Map: { [id: number]: Function_Suite } = {
             { parameters: [[1, 2, 3, 3, 4, 3, 5], 3], expected_result: 2 },
         ],
         test_count: 5,
+        hint: "What does indexOf return?",
     },
     4: {
         // countOccurrences function 
@@ -73,5 +78,6 @@ export const Function_Suite_Map: { [id: number]: Function_Suite } = {
             { parameters: [[-2, 1, "a", 3, 4, "a", 3, 4, 4], 4], expected_result: 3 },
         ],
         test_count: 5,
+        hint: "What makes count go up?"
     },
 } 
