@@ -65,7 +65,7 @@ export default function Question() {
     const [state, setState] = useState<StateType>(initialState);
     const [submitError, setSubmitError] = useState<SubmitErrorStateType>(submitErrorInitialState);
     const { id } = useParams<{ id: string }>();
-    const { questionFetchState, loading, error } = useQuestionFetch(id);
+    const { questionFetchState } = useQuestionFetch(id);
     const [submissionLoading, setSubmissionLoading] = useState(false);
     const { time, start, reset } = useTimer({
         autostart: true,
@@ -123,7 +123,7 @@ export default function Question() {
     };
 
     const toggleHint = () => {
-        setShowHint(!showHint);
+        setHintUsed(!hint_used);
     };
 
     let alertContent;
@@ -171,7 +171,7 @@ export default function Question() {
                         {questionFetchState.results}
                     </SyntaxHighlighter>
                     <button onClick={toggleHint} className="hint-button">Show Hint</button>
-                    {showHint && <p className="hint">{hints[parseInt(id, 10)]}</p>}
+                    {hint_used && <p className="hint">{hints[parseInt(id, 10)]}</p>}
                     <TextField
                         id="standard-multiline-static"
                         label="Interpretation"
