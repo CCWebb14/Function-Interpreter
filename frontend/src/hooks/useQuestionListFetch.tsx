@@ -17,7 +17,7 @@ type response = {
     }
 }
 
-export const useQuestionListFetch = () => {
+export const useQuestionListFetch = (path : string) => {
 	// initial state as false
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
@@ -27,7 +27,7 @@ export const useQuestionListFetch = () => {
     const FetchQuestionList = async () => {
         try {
             setLoading(true);
-            const res : response = await axios.get('http://localhost:4001/api/question/list')
+            const res : response = await axios.get(path)
             console.log(res.data.message)
 
             setState(() => ({   

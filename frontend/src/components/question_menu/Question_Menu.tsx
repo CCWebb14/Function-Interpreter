@@ -8,7 +8,7 @@ import { ListItemButton } from '@mui/material';
 
 export default function Question_Menu() {
     const { state, loading, error, setIsLoadingMore } =
-    useQuestionListFetch();
+    useQuestionListFetch('http://localhost:4001/api/question/list');
     const navigate = useNavigate();
 
     const handleNav = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, id : string) => {

@@ -8,6 +8,7 @@ import { configurePassport } from './config/passport';
 import session from 'express-session';
 import { ConnectSessionKnexStore } from "connect-session-knex";
 import db from './models/db';
+import attemptsRoutes from './routes/attemptsRoutes';
 
 //Express setup
 const app = express();
@@ -50,6 +51,9 @@ app.use('/api/users', usersRoutes);
 
 // Authenticated route for questions and submissions
 app.use('/api/question', questionRoutes);
+
+// Authenticated route to pull from question attempts
+app.use('/api/attempts', attemptsRoutes)
 
 // Start the server
 app.listen(port, () => {
