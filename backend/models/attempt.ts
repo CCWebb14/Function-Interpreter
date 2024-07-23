@@ -46,8 +46,10 @@ export const getCompletedQuestionsCount = async (userID: number): Promise<number
             .where({ userID })
             .countDistinct('questionID as attemptedQuestions');
 
+        
+        const attemptedQuestions = parseInt(result[0]?.attemptedQuestions as string, 10);
 
-        return result[0]?.attemptedQuestions || 0; // Return the count or 0 if no records
+        return isNaN(attemptedQuestions) ? 0: attemptedQuestions; // Return the count or 0 if no records
     } catch (error) {
         throw new Error('Failed to get the number of completed questions from DB');
     }
@@ -67,7 +69,10 @@ export const getFullyPassedQuestionsCount = async (userID: number): Promise<numb
         const result = await db(subquery)
             .count('questionID as passedQuestions');
 
-        return result[0]?.passedQuestions || 0; // Return the count or 0 if no records
+            // Convert the count to a number
+        const passedQuestions = parseInt(result[0]?.passedQuestions as string, 10);
+
+        return isNaN(passedQuestions) ? 0 : passedQuestions;
     } catch (error) {
         throw new Error('Failed to get the number of fully passed questions from DB');
     }
