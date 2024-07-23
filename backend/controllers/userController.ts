@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { findUserByUsername, findUserByEmail, createUser } from '../models/users';
+import { findUserByUsername, findUserByEmail, createUser, User } from '../models/users';
 import passport from 'passport';
+import { getTotalTimeTaken, getCompletedQuestionsCount, getFullyPassedQuestionsCount, getFullyPassedQuestionIDs} from '../models/attempt';
 //import bcrypt from 'bcrypt'; // Ensure bcrypt is imported
 
 //Signup Controllers
@@ -81,5 +82,38 @@ export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
         return res.status(200).json({ success: true });
     } else {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
+    }
+};
+
+// User Profile Controllers
+export const userProfile = async (req: Request, res: Response, next: NextFunction)=> {
+    if (req.isAuthenticated()) {
+        try { 
+            const user = req.user as User; 
+            const userid = user.userID;
+            const username = user.username;
+            
+
+            // timeTaken is in milliseconds so convert to seconds for response
+            let totaltime = await getTotalTimeTaken(userid);
+            totaltime = totaltime/1000;
+
+            // total attempted questions regardless of pass or fail 
+            let attemptedQuestions = await getCompletedQuestionsCount(userid);
+
+            // total passing questions 
+            let passedQuestions = await getFullyPassedQuestionsCount(userid);
+
+            // // array of passing questions (might include; not sure)
+            // let passedQuestionsList = await getFullyPassedQuestionIDs(userid);
+
+
+            return res.status(200).json({ success: true, userID: userid, userName: username, totalTime: totaltime, 
+                attemptedQuestions: attemptedQuestions, passedQuestions: passedQuestions});
+    
+        } catch (err) {
+            return res.status(401).json({ success: false, message: 'error'});
+        }
+      
     }
 };

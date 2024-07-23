@@ -12,6 +12,9 @@ import AlertTitle from '@mui/material/AlertTitle';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTimer } from 'use-timer';
 
+
+// tests_failed is number of failed tests
+// failed_tests is an array of failed tests 
 const initialState = {
     success: '',
     tests_passed: '',
