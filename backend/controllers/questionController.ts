@@ -69,7 +69,11 @@ interface getQuestionRequest extends Request<{ id: number }, {}, {}> { }
 export const getQuestion = async (req: getQuestionRequest, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
         const { id } = req.params;
+        if (!(id in Function_Suite_Map)) {
+            return res.status(400).json({success: false, message: 'Invalid id'});
+        }
         const test_suite = Function_Suite_Map[id];
+        
 
         return res.status(200).json({
             success: true,
