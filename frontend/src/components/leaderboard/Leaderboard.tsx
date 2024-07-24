@@ -8,20 +8,21 @@ export default function Leaderboard() {
     console.log('State: ', state.results)
 
     return (
-        <div className='app-container'>
-            <div className='box-container-su'>
-                <div className='box'>Leaderboard</div>
+            <div className='box-container-leaderboard'>
+                <div className='leaderboard-header'>Leaderboard</div>
                 <ol>
                 {
                     state.results.map((user, index)=> (
                         <li key={index} className='leaderboard'>
-                            <div>{index+1 + '. ' + user.username}</div>
+                            <div className='lb-item'>
+                                <div className='lb-word'>{index+1 + '.'}</div>
+                                <div>{user.username}</div>
+                            </div>
                             <div>{user.totalScore}</div>
                         </li>
                     ))
                 }
                 </ol>
             </div>
-        </div>
     )
 }

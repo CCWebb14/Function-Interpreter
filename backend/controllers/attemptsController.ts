@@ -7,7 +7,6 @@ export const getTop10Scores = async (req: Request, res: Response) => {
         try {
         
             const result = await getTopScores();
-            console.log('controller: ', result)
     
             // Return a success message
             return res.status(201).json({success: true, message: result});
