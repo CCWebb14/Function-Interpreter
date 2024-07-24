@@ -93,6 +93,7 @@ export default function Question() {
                 });
                 setSubmitError(submitErrorInitialState);
                 // Only reset question timer on successful response
+                setReasoning('');
                 reset();
                 start();
             } else {
