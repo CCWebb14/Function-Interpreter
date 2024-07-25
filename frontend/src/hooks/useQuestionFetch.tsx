@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 // good to have an initial state to reset
 const initialState = {
@@ -13,6 +13,7 @@ interface StateType {
 }
 
 type Response = {
+    status: number,
     data: {
         success: string;
         function_string: string;
@@ -30,7 +31,7 @@ export const useQuestionFetch = (id: number | undefined) => {
     const FetchQuestion = async () => {
         try {
             setLoading(true);
-            const res = await axios.get<Response>(`http://localhost:4001/api/question/id/${id}`)
+            const res : Response = await axios.get(`http://localhost:4001/api/question/id/${id}`)
 
             if (res.status >= 400) {
                 setError(true);

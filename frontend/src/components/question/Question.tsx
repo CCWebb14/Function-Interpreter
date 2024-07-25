@@ -185,7 +185,6 @@ export default function Question() {
                         label="Interpretation"
                         multiline
                         rows={2}
-                        maxRows={2}
                         variant="filled"
                         fullWidth
                         required
@@ -218,7 +217,6 @@ export default function Question() {
                     label="What are you changing and why?"
                     multiline
                     rows={2}
-                    maxRows={2}
                     variant="filled"
                     fullWidth
                     sx={{ display: 'flex', flex:1 }}
