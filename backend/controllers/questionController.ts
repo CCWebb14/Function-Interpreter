@@ -35,9 +35,9 @@ export const llmSubmit = async (req: llmRequest, res: Response, next: NextFuncti
             return res.status(200).json({
                 success: true,
                 tests_passed: test_results.tests_passed,
-                tests_failed: test_results.total_tests,
-                failed_tests: test_results.failed_tests,
-                llm_function: llm_gen_function.toString()
+                total_tests: test_results.total_tests,
+                llm_function: llm_gen_function.toString(),
+                cases: test_results.cases
             });
         } catch (e) {
             if (e instanceof Error) {
