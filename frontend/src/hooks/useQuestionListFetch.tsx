@@ -1,19 +1,23 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// good to have an initial state to reset
+type qMap = {
+    [questionID: number]: number;
+};
+
+// Initial state for resetting
 const initialState = {
 	results: [],
 };
 
 interface StateType {
-    results: string[];
+    results: qMap;
 }
 
 type response = {
     data: {
         success: string;
-        message: Array<string>;
+        message: qMap;
     }
 }
 
@@ -28,7 +32,6 @@ export const useQuestionListFetch = () => {
         try {
             setLoading(true);
             const res : response = await axios.get('http://localhost:4001/api/question/list')
-            console.log(res.data.message)
 
             setState(() => ({   
                 results : res.data.message
@@ -37,7 +40,6 @@ export const useQuestionListFetch = () => {
             setError(true);
         }
         setLoading(false);
-        console.log(state.results.toString())
     }
 
     // Use only on mount, [] is a dependancy array, ie: when do we want it to trigger

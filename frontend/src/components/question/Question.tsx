@@ -11,6 +11,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTimer } from 'use-timer';
+import NavButton from '../navigation/NavButton';
 
 const initialState = {
     success: '',
@@ -54,10 +55,12 @@ type response = {
 
 export default function Question() {
     const [user_input, setUserInput] = useState('');
+    const [reasoning, setReasoning] = useState('');
     const [state, setState] = useState<StateType>(initialState);
     const [submitError, setSubmitError] = useState<SubmitErrorStateType>(submitErrorInitialState);
     const { id } = useParams<{ id: string }>();
-    const { questionFetchState } = useQuestionFetch(id);
+    const [ stateID, setStateID ] = useState(Number(id));
+    const { questionFetchState, error } = useQuestionFetch(stateID);
     const [submissionLoading, setSubmissionLoading] = useState(false);
     const { time, start, reset } = useTimer({
         autostart: true,
@@ -73,7 +76,7 @@ export default function Question() {
 
         try {
             setSubmissionLoading(true);
-            const axios_response: response = await axios.post(`http://localhost:4001/api/question/submit/${id}`, {
+            const axios_response: response = await axios.post(`http://localhost:4001/api/question/submit/${stateID}`, {
                 user_input, 
                 time,
                 hint_used
@@ -90,6 +93,7 @@ export default function Question() {
                 });
                 setSubmitError(submitErrorInitialState);
                 // Only reset question timer on successful response
+                setReasoning('');
                 reset();
                 start();
             } else {
@@ -113,6 +117,14 @@ export default function Question() {
         }
         setSubmissionLoading(false);
     };
+
+    const nextQuestion = () => {
+        setUserInput('');
+        reset();
+        setHintUsed(false);
+        setState(initialState);
+        setStateID(stateID + 1);
+    }
 
     const toggleHint = () => {
         setHintUsed(!hint_used);
@@ -146,7 +158,9 @@ export default function Question() {
 
     return (
         <div className='question-container'>
-            <div className='box-container-out'>
+        {!error ? (
+            <>
+                <div className='box-container-out'>
                 <div className='box'>
                     <div className='question-header'>Output</div>
                     <SyntaxHighlighter language="javascript" showLineNumbers style={dark}
@@ -157,9 +171,9 @@ export default function Question() {
             </div>
             <div className='box-container-q'>
                 <div className='box'>
-                    <div className='question-header'>Question #{id}</div>
+                    <div className='question-header'>Question #{stateID}</div>
                     <SyntaxHighlighter language="javascript" showLineNumbers
-                        customStyle={{ display: 'flex', width: '100%', flex: 1, padding: 0 }} >
+                        customStyle={{ flex: 1, width: '100%', padding: 0 }} >
                         {questionFetchState.function_string}
                     </SyntaxHighlighter>
                     <div className='hint-container'>
@@ -170,24 +184,61 @@ export default function Question() {
                         id="standard-multiline-static"
                         label="Interpretation"
                         multiline
-                        rows={4}
+                        rows={2}
                         variant="filled"
                         fullWidth
                         required
-                        sx={{ display: 'flex' }}
+                        value={user_input}
                         onChange={
                             (e) => setUserInput(e.target.value)
                         }
                     />
                     <div className='footer'>
-                        <div className='spacer'></div>
-                        {submissionLoading ?
-                            (<CircularProgress color="secondary" />) :
-                            (<>{alertContent}</>)}
-                        <div onClick={handleSubmit} className="submit-button">Submit</div>
+                        <div className='footer-container'></div>
+                        <div className='footer-container'>
+                            {submissionLoading ?
+                                (<CircularProgress color="secondary" />) :
+                                (<>{alertContent}</>)}
+                        </div>
+                        <div className='footer-container-right'>
+                            {!state.complete_success ? 
+                                    (<div onClick={handleSubmit} className="submit-button">Submit</div>) :
+                                    (<div onClick={nextQuestion} className="submit-button">Next Question</div>)
+                                }   
+                        </div>
                     </div>
                 </div>
             </div>
+            {state.returned && !state.complete_success ? 
+            (<div className='box-container-q'>
+                <div className='box'>
+                <TextField
+                    id="standard-multiline-static"
+                    label="What are you changing and why?"
+                    multiline
+                    rows={2}
+                    variant="filled"
+                    fullWidth
+                    sx={{ display: 'flex', flex:1 }}
+                    value={reasoning}
+                    onChange={
+                        (e) => setReasoning(e.target.value)
+                    }
+                />
+                </div>
+            </div>) : 
+                null
+            }
+        </>
+        ) : (
+                <>
+                    <div className='error-container'>
+                        <div className='error-content'>Invalid question id</div>
+                        <NavButton name={'Return To Question List'} style={'submit-button'} path='/questions'></NavButton>
+                    </div>
+                </>
+            )
+        }
         </div>
     )
 }
