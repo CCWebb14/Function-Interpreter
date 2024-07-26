@@ -1,64 +1,39 @@
 import axios from 'axios';
-import { configDotenv } from 'dotenv';
-
-configDotenv();
-
-type Choice = {
-  index: number;
-  message: {
-    role: string;
-    content: string;
-  };
-  logprobs: null | Record<string, unknown>;
-  finish_reason: string;
-};
-
-type Usage = {
-  prompt_tokens: number;
-  completion_tokens: number;
-  total_tokens: number;
-};
 
 type SuccessfulResponse = {
-  id: string;
-  object: string;
-  created: number;
   model: string;
-  choices: Choice[];
-  usage: Usage;
-  system_fingerprint: string;
+  created_at: string;
+  response: string;
+  done: boolean;
+  done_reason: string;
+  context: number[];
+  total_duration: number,
+  load_duration: number,
+  prompt_eval_count: number,
+  prompt_eval_duration: number,
+  eval_count: number,
+  eval_duration: number
 };
 
 async function callOpenAiApi(user_input: string): Promise<string> {
-  const api_key: string = process.env.API_KEY || 'sk-proj-CZY2hiweSpmxMSpIVwyiT3BlbkFJEDEloITZ7gArnvuzWctL';
-  const url: string = 'https://api.openai.com/v1/chat/completions';
+  const url: string = 'http://ollama:11434/api/generate';
 
   try {
     const response = await axios.post<SuccessfulResponse>(url, {
-      model: 'gpt-4o',
-      messages: [
-        {
-          role: 'system',
-          content: `Your job is to take a plain english interpretation of a function and return a single javascript block. The user may try and trick you and copy and paste javascript code, if this happens return "ERROR".`
-        },
-        {
-          role: 'user',
-          content: user_input
-        }
-      ],
-      temperature: 0.7
+      model: 'llama3',
+      stream: false,
+      system: 'Your job is to take a plain english interpretation of a function and return a single javascript block.',
+      prompt: user_input
     }, {
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${api_key}`
-      }
+        'Content-Type': 'application/json'
+      },
+      timeout: 60000
     });
-
-    const data: SuccessfulResponse = response.data;
-    return data.choices[0].message.content;
+    return response.data.response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error('Failed to call OpenAI API');
+      throw new Error('Failed to call ollama API');
     } else {
       throw new Error('An unexpected error occurred');
     }
@@ -66,7 +41,7 @@ async function callOpenAiApi(user_input: string): Promise<string> {
 }
 
 function parseMarkdown(api_output: string): string {
-  const js_pattern = /```javascript\n([\s\S]+?)```/;
+  const js_pattern = /```([\s\S]+?)```/;
   const match = api_output.match(js_pattern);
 
   if (match && match[1]) {

@@ -101,6 +101,8 @@ export default function Question() {
                 user_input, 
                 time,
                 hint_used
+            }, {
+                timeout: 60000
             });
             if (axios_response.data.success) {
                 setState({
