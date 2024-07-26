@@ -12,26 +12,37 @@ import AlertTitle from '@mui/material/AlertTitle';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTimer } from 'use-timer';
 import NavButton from '../navigation/NavButton';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box';
 
 const initialState = {
     success: '',
     tests_passed: '',
-    tests_failed: '',
-    failed_tests: [],
+    total_tests: '',
+    cases: [],
     llm_function: '',
-    returned: false,
     complete_success: false,
+    returned: false
 };
 
 interface StateType {
     success: string;
     tests_passed: string;
-    tests_failed: string;
+    total_tests: string;
+    cases: test_case[];
     llm_function: string;
-    failed_tests: number[];
-    returned: boolean;
     complete_success: boolean;
+    returned: boolean;
 }
+
+type test_case = {
+    testID: number; 
+    input : any[];
+    expected_output : any;
+    output : any;
+    pass : boolean;
+};
 
 const submitErrorInitialState = {
     errorMsg: '',
@@ -47,9 +58,9 @@ type response = {
     data: {
         success: string;
         tests_passed: string;
-        tests_failed: string;
-        failed_tests: number[];
+        total_tests: string;
         llm_function: string;
+        cases: test_case[];
     }
 }
 
@@ -66,10 +77,20 @@ export default function Question() {
         autostart: true,
     });
     const [ hint_used, setHintUsed ] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
     if (!id) {
         return <div>Error: Question ID is missing.</div>;
     }
+
+    const handleOpen = () => {
+        setModalOpen(true);
+    };
+
+    // Function to close the modal
+    const handleClose = () => {
+        setModalOpen(false);
+    };
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
@@ -85,11 +106,11 @@ export default function Question() {
                 setState({
                     success: axios_response.data.success,
                     tests_passed: axios_response.data.tests_passed,
-                    tests_failed: axios_response.data.tests_failed,
-                    failed_tests: axios_response.data.failed_tests,
+                    total_tests: axios_response.data.total_tests,
+                    cases: axios_response.data.cases,
                     llm_function: axios_response.data.llm_function,
                     returned: true,
-                    complete_success: (axios_response.data.tests_passed === axios_response.data.tests_failed)
+                    complete_success: (axios_response.data.tests_passed === axios_response.data.total_tests)
                 });
                 setSubmitError(submitErrorInitialState);
                 // Only reset question timer on successful response
@@ -142,15 +163,61 @@ export default function Question() {
         alertContent =
             (<Alert severity="success">
                 <AlertTitle>Success</AlertTitle>
-                {`Tests passed: ${state.tests_passed}/${state.tests_failed}`}
+                {`Tests passed: ${state.tests_passed}/${state.total_tests}`}
+                <br />
+                <Modal
+                    open={modalOpen}
+                    onClose={handleClose}
+                >
+                    <Box className="modal-style">
+                        <Typography id="terms-modal-title" variant="h6" align="center">
+                            Test Case Breakdown
+                        </Typography>
+                        {Object.entries(state.cases).map(([key, testCase]) => (
+                        <Typography id="terms-modal-description" variant="body1" gutterBottom>
+                            TestID: {key}  <br />
+                            Input: {testCase.input.toString()} <br />
+                            Result: {testCase.output.toString()}
+                            {(testCase.pass) ? (
+                                <> == </>
+                            ) : (<> != </>)}
+                            {testCase.expected_output.toString()} <br />
+                            Pass: {testCase.pass.toString()}
+                        </Typography>
+                        ))}
+                    </Box>
+                </Modal>
+                <span onClick={handleOpen} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>test case breakdown</span>
             </Alert>)
     } else if (state.returned) {
         alertContent =
             (<Alert severity="error" color='warning'>
                 <AlertTitle>Incorrect</AlertTitle>
-                {`Tests passed: ${state.tests_passed}/${state.tests_failed}`}
+                {`Tests passed: ${state.tests_passed}/${state.total_tests}`}
                 <br />
-                {`Failed test(s): ${state.failed_tests.map(index => index + 1).join(', ')}`}
+                <Modal
+                    open={modalOpen}
+                    onClose={handleClose}
+                >
+                    <Box className="modal-style">
+                        <Typography id="terms-modal-title" variant="h6" align="center">
+                            Test Case Breakdown
+                        </Typography>
+                        {Object.entries(state.cases).map(([key, testCase]) => (
+                        <Typography id="terms-modal-description" variant="body1" gutterBottom>
+                            TestID: {key}  <br />
+                            Input: {testCase.input.toString()} <br />
+                            Result: {testCase.output.toString()}
+                            {(testCase.pass) ? (
+                                <> == </>
+                            ) : (<> != </>)}
+                            {testCase.expected_output.toString()} <br />
+                            Pass: {testCase.pass.toString()}
+                        </Typography>
+                        ))}
+                    </Box>
+                </Modal>
+                <span onClick={handleOpen} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>test case breakdown</span>
             </Alert>)
     } else {
         alertContent = null;
@@ -219,7 +286,7 @@ export default function Question() {
                     rows={2}
                     variant="filled"
                     fullWidth
-                    sx={{ display: 'flex', flex:1 }}
+                    sx={{ display: 'flex', flex: 1 }}
                     value={reasoning}
                     onChange={
                         (e) => setReasoning(e.target.value)
