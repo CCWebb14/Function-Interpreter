@@ -24,6 +24,6 @@ dist-ssr
 *.sw?
 
 # ollama
-.id_ed*
-.history
-.models/
+ollama/history
+ollama/id_*
+ollama/models/
