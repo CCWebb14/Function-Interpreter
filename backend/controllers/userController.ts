@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { findUserByUsername, findUserByEmail, createUser } from '../models/users';
 import passport from 'passport';
-//import bcrypt from 'bcrypt'; // Ensure bcrypt is imported
+import bcrypt from 'bcrypt';
 
 //Signup Controllers
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
@@ -21,11 +21,12 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
             return;
         }
 
-        // Hash the password (bcrypt *milestone 2? diff hash?)
-        //const hashedPassword = await bcrypt.hash(password, 10);
+        // Hash the password
+        //making the bcrypt algorithm perform 2^10 (1024) iterations of the hashing process.
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         //Non hash version atm
-        const result = await createUser(username, password, firstName, lastName, email);
+        const result = await createUser(username, hashedPassword, firstName, lastName, email);
 
         // Return a success message
         res.status(201).json(result);

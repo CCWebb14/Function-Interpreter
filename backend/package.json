@@ -7,10 +7,12 @@
     "test": "npx ts-mocha 'tests/*.ts'"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.17",
     "@types/knex": "^0.16.1",
     "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "connect-session-knex": "^5.0.0",
     "cors": "^2.8.5",
