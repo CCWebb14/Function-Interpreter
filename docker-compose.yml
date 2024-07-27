@@ -11,10 +11,14 @@ services:
     container_name: ollama
     pull_policy: always
     restart: always
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      start_period: 5s
+      retries: 20
 
   backend:
-    depends_on:
-      - ollama
     build: ./backend
     ports:
       - "4001:4001"
@@ -27,7 +31,8 @@ services:
 
   frontend:
     depends_on:
-      - backend
+      ollama:
+       condition: service_healthy
     build: ./frontend
     ports:
       - "4000:4000"
