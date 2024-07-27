@@ -2,15 +2,15 @@ version: '3.8'
 
 services:
   ollama:
-    volumes:
-      - ./ollama:/root/.ollama
+    build: ./ollama
+    image: ollama/ollama:latest
     ports:
-      - 11434:11434
+        - 11434:11434
+    volumes:
+        - ./ollama:/root/.ollama
     container_name: ollama
     pull_policy: always
-    tty: true
-    restart: unless-stopped
-    image: ollama/ollama:latest
+    restart: always
 
   backend:
     depends_on:
@@ -27,7 +27,7 @@ services:
 
   frontend:
     depends_on:
-      - ollama
+      - backend
     build: ./frontend
     ports:
       - "4000:4000"
