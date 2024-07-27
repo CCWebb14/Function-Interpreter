@@ -17,7 +17,7 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 
         const existingEmail = await findUserByEmail(email)
         if (existingEmail) {
-            res.status(401).json({ message: 'Username already taken' });
+            res.status(401).json({ message: 'Email already taken' });
             return;
         }
 

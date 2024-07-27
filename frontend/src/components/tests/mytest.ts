@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import axios from 'axios';
 
 // Sample function to test
 export function add(a: number, b: number): number {
@@ -34,30 +35,135 @@ export function runTests() {
         });
     });
 
-    describe('asdf', () => {
-        it('should add two numbers', () => {
-            const result = add(2, 3);
-            expect(result).to.equal(5);
+    // Define the test suite
+    const apiUrl = 'http://localhost:4001/api/test';
+    const apiUrl2 = 'http://localhost:4001/api/users';
+
+    describe('Database Operations', function () {
+        it('should create a test table', async function () {
+            const response = await axios.get(`${apiUrl}/create-test-table`);
+            const result = response.data;
+            expect(result).to.have.property('success', true);
+            expect(result).to.have.property('message', 'Test table created successfully.');
         });
 
-        it('should subtract two numbers', () => {
-            const result = add(5, -2);
-            expect(result).to.equal(3);
+        it('should insert test data into the table', async function () {
+            const response = await axios.post(`${apiUrl}/insert-test-data`, { name: 'Test User' });
+            const result = response.data;
+            expect(result).to.have.property('success', true);
+            expect(result).to.have.property('message', 'Test data inserted successfully.');
         });
 
-        it('should add two numbers', () => {
-            const result = add(2, 3);
-            expect(result).to.equal(5);
+        it('should query test data from the table', async function () {
+            const response = await axios.get(`${apiUrl}/query-test-data`);
+            const result = response.data;
+            expect(result).to.have.property('success', true);
+            expect(result.data).to.be.an('array');
+            expect(result.data).to.have.lengthOf(1);
+            expect(result.data[0]).to.have.property('name', 'Test User');
         });
 
-        it('should add two numbers', () => {
-            const result = add(2, 3);
-            expect(result).to.equal(5);
+        it('should update test data in the table', async function () {
+            const queryResponse = await axios.get(`${apiUrl}/query-test-data`);
+            const user = queryResponse.data.data[0];
+            const updateResponse = await axios.put(`${apiUrl}/update-test-data/${user.id}`, { name: 'Updated User' });
+            expect(updateResponse.data).to.have.property('success', true);
+            expect(updateResponse.data).to.have.property('message', 'Test data updated successfully.');
         });
 
-        it('should add two numbers', () => {
-            const result = add(2, 3);
-            expect(result).to.equal(5);
+        it('should delete test data from the table', async function () {
+            const queryResponse = await axios.get(`${apiUrl}/query-test-data`);
+            const user = queryResponse.data.data[0];
+            const deleteResponse = await axios.delete(`${apiUrl}/delete-test-data/${user.id}`);
+            expect(deleteResponse.data).to.have.property('success', true);
+            expect(deleteResponse.data).to.have.property('message', 'Test data deleted successfully.');
+        });
+
+        it('should drop the test table', async function () {
+            const response = await axios.delete(`${apiUrl}/drop-test-table`);
+            const result = response.data;
+            expect(result).to.have.property('success', true);
+            expect(result).to.have.property('message', 'Test table dropped successfully.');
+        });
+    });
+
+    describe('User Registration API', function () {
+
+        it('should register a new user successfully', async function () {
+            const newUser = {
+                username: 'newuser',
+                password: 'password123',
+                firstName: '',
+                lastName: '',
+                email: 'newuser@example.com',
+            };
+
+            try {
+                const response = await axios.post(`${apiUrl2}/register`, newUser);
+                expect(response.status).to.equal(201);
+                expect(response.data).to.have.property('success', true);
+                expect(response.data).to.have.property('message', 'User created successfully');
+            } catch (error: any) {
+                throw new Error(`Failed to register new user: ${error.response ? error.response.data.message : error.message}`);
+            }
+        });
+
+        it('should not allow duplicate usernames', async function () {
+            const duplicateUser = {
+                username: 'newuser',
+                password: 'password123',
+                firstName: '',
+                lastName: '',
+                email: 'newuser2@example.com',
+            };
+
+            try {
+                await axios.post(`${apiUrl2}/register`, duplicateUser);
+            } catch (error: any) {
+                expect(error.response.status).to.equal(400);
+                expect(error.response.data).to.have.property('message', 'Username already taken');
+
+            }
+        });
+
+        it('should not allow duplicate emails', async function () {
+            const duplicateUser = {
+                username: 'anotherusers',
+                password: 'password123',
+                firstName: '',
+                lastName: '',
+                email: 'newuser2@example.com',
+            };
+
+            try {
+                await axios.post(`${apiUrl2}/register`, duplicateUser);
+            } catch (error: any) {
+                try {
+                    expect(error.response.status).to.equal(401);
+                    expect(error.response.data).to.have.property('message', 'Email already taken');
+                } catch (assertionError) {
+                    throw new Error(`Expected status 401 and message 'Email already taken', but got status ${error.response.status} and message '${error.response.data.message}'`);
+                }
+            }
+        });
+
+        it('should allow overlapping details but different username and email', async function () {
+            const newUser = {
+                username: 'anotheruser',
+                password: 'password123',
+                firstName: '',
+                lastName: '',
+                email: 'anotheruser@example.com',
+            };
+
+            try {
+                const response = await axios.post(`${apiUrl2}/register`, newUser);
+                expect(response.status).to.equal(201);
+                expect(response.data).to.have.property('success', true);
+                expect(response.data).to.have.property('message', 'User created successfully');
+            } catch (error: any) {
+                throw new Error(`Failed to register new user: ${error.response ? error.response.data.message : error.message}`);
+            }
         });
     });
 }

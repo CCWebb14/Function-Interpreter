@@ -4,23 +4,23 @@ import { runTests } from './mytest';
 
 export default function Test_Suite() {
 
-    useEffect(() => {
-        // Initialize Mocha
-        mocha.setup('bdd');
-        runTests();
-        // Run Mocha
-        mocha.run();
+  useEffect(() => {
+    // Initialize Mocha
+    mocha.setup('bdd');
+    runTests();
+    // Run Mocha
+    mocha.run();
 
-        // Cleanup function to reset Mocha state when the component unmounts
-        return () => {
-            mocha.suite.suites = [];
-        };
-    }, []);
+    // Cleanup function to reset Mocha state when the component unmounts
+    return () => {
+      mocha.suite.suites = [];
+    };
+  }, []);
 
-    //NOTE embedded css to only apply to this page
-    return (
-        <div>
-            <style>{`
+  //NOTE embedded css to only apply to this page
+  return (
+    <div>
+      <style>{`
          #mocha {
           margin: 20px;
           padding: 20px;
@@ -410,7 +410,7 @@ export default function Test_Suite() {
           }
         }
       `}</style>
-            <div id="mocha"></div> {/* Mocha will render the test results here */}
-        </div>
-    );
+      <div id="mocha"></div> {/* Mocha will render the test results here */}
+    </div>
+  );
 }
