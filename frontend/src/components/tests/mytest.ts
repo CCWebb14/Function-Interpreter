@@ -8,84 +8,10 @@ export function add(a: number, b: number): number {
 
 // Define the test suite
 export function runTests() {
-    describe('Math Functions', () => {
-        it('should add two numbers', () => {
-            const result = add(2, 3);
-            expect(result).to.equal(5);
-        });
 
-        it('should subtract two numbers', () => {
-            const result = add(5, -2);
-            expect(result).to.equal(3);
-        });
-
-        it('should add two numbers', () => {
-            const result = add(2, 3);
-            expect(result).to.equal(5);
-        });
-
-        it('should add two numbers', () => {
-            const result = add(2, 3);
-            expect(result).to.equal(5);
-        });
-
-        it('should add two numbers', () => {
-            const result = add(2, 3);
-            expect(result).to.equal(5);
-        });
-    });
-
-    // Define the test suite
+    // apiLinks
     const apiUrl = 'http://localhost:4001/api/test';
     const apiUrl2 = 'http://localhost:4001/api/users';
-
-    describe('Database Operations', function () {
-        it('should create a test table', async function () {
-            const response = await axios.get(`${apiUrl}/create-test-table`);
-            const result = response.data;
-            expect(result).to.have.property('success', true);
-            expect(result).to.have.property('message', 'Test table created successfully.');
-        });
-
-        it('should insert test data into the table', async function () {
-            const response = await axios.post(`${apiUrl}/insert-test-data`, { name: 'Test User' });
-            const result = response.data;
-            expect(result).to.have.property('success', true);
-            expect(result).to.have.property('message', 'Test data inserted successfully.');
-        });
-
-        it('should query test data from the table', async function () {
-            const response = await axios.get(`${apiUrl}/query-test-data`);
-            const result = response.data;
-            expect(result).to.have.property('success', true);
-            expect(result.data).to.be.an('array');
-            expect(result.data).to.have.lengthOf(1);
-            expect(result.data[0]).to.have.property('name', 'Test User');
-        });
-
-        it('should update test data in the table', async function () {
-            const queryResponse = await axios.get(`${apiUrl}/query-test-data`);
-            const user = queryResponse.data.data[0];
-            const updateResponse = await axios.put(`${apiUrl}/update-test-data/${user.id}`, { name: 'Updated User' });
-            expect(updateResponse.data).to.have.property('success', true);
-            expect(updateResponse.data).to.have.property('message', 'Test data updated successfully.');
-        });
-
-        it('should delete test data from the table', async function () {
-            const queryResponse = await axios.get(`${apiUrl}/query-test-data`);
-            const user = queryResponse.data.data[0];
-            const deleteResponse = await axios.delete(`${apiUrl}/delete-test-data/${user.id}`);
-            expect(deleteResponse.data).to.have.property('success', true);
-            expect(deleteResponse.data).to.have.property('message', 'Test data deleted successfully.');
-        });
-
-        it('should drop the test table', async function () {
-            const response = await axios.delete(`${apiUrl}/drop-test-table`);
-            const result = response.data;
-            expect(result).to.have.property('success', true);
-            expect(result).to.have.property('message', 'Test table dropped successfully.');
-        });
-    });
 
     describe('User Registration API', function () {
 
@@ -166,4 +92,75 @@ export function runTests() {
             }
         });
     });
+
+    describe('User Login and Logout API', function () {
+
+        it('should succesfully log user in with the right credentials', async function () {
+            const credentials = {
+                username: 'newuser',
+                password: 'password123',
+            };
+
+            try {
+                const response = await axios.post(`${apiUrl2}/login`, credentials);
+                expect(response.status).to.equal(200);
+                expect(response.data).to.have.property('success', true);
+                expect(response.data).to.have.property('user');
+                expect(response.data.user).to.have.property('username', 'newuser');
+            } catch (error: any) {
+                throw new Error(`Failed to log in: ${error.response ? error.response.data.message : error.message}`);
+            }
+        });
+    });
+
+
+    describe('Database Operations [CRUD]', function () {
+        it('should create a test table', async function () {
+            const response = await axios.get(`${apiUrl}/create-test-table`);
+            const result = response.data;
+            expect(result).to.have.property('success', true);
+            expect(result).to.have.property('message', 'Test table created successfully.');
+        });
+
+        it('should insert test data into the table', async function () {
+            const response = await axios.post(`${apiUrl}/insert-test-data`, { name: 'Test User' });
+            const result = response.data;
+            expect(result).to.have.property('success', true);
+            expect(result).to.have.property('message', 'Test data inserted successfully.');
+        });
+
+        it('should query test data from the table', async function () {
+            const response = await axios.get(`${apiUrl}/query-test-data`);
+            const result = response.data;
+            expect(result).to.have.property('success', true);
+            expect(result.data).to.be.an('array');
+            expect(result.data).to.have.lengthOf(1);
+            expect(result.data[0]).to.have.property('name', 'Test User');
+        });
+
+        it('should update test data in the table', async function () {
+            const queryResponse = await axios.get(`${apiUrl}/query-test-data`);
+            const user = queryResponse.data.data[0];
+            const updateResponse = await axios.put(`${apiUrl}/update-test-data/${user.id}`, { name: 'Updated User' });
+            expect(updateResponse.data).to.have.property('success', true);
+            expect(updateResponse.data).to.have.property('message', 'Test data updated successfully.');
+        });
+
+        it('should delete test data from the table', async function () {
+            const queryResponse = await axios.get(`${apiUrl}/query-test-data`);
+            const user = queryResponse.data.data[0];
+            const deleteResponse = await axios.delete(`${apiUrl}/delete-test-data/${user.id}`);
+            expect(deleteResponse.data).to.have.property('success', true);
+            expect(deleteResponse.data).to.have.property('message', 'Test data deleted successfully.');
+        });
+
+        it('should drop the test table', async function () {
+            const response = await axios.delete(`${apiUrl}/drop-test-table`);
+            const result = response.data;
+            expect(result).to.have.property('success', true);
+            expect(result).to.have.property('message', 'Test table dropped successfully.');
+        });
+    });
+
+
 }
