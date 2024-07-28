@@ -3,13 +3,15 @@ import '../../styles/leaderboard.css'
 import { useQuestionListFetch } from '../../hooks/useQuestionListFetch';
 
 export default function Leaderboard() {
-  const { state } = 
-    useQuestionListFetch('http://localhost:4001/api/attempts/top-ten');
-    console.log('State: ', state.results)
+  const { state } = useQuestionListFetch('http://localhost:4001/api/attempts/top-ten');
 
     return (
             <div className='box-container-leaderboard'>
-                <div className='leaderboard-header'>Leaderboard</div>
+                <div className='leaderboard-title'>Leaderboard</div>
+                <div className='leaderboard-header'>
+                    <div>Username</div>
+                    <div>Score</div>
+                </div>
                 <ol>
                 {
                     state.results.map((user, index)=> (

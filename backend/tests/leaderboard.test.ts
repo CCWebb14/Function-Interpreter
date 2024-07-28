@@ -1,13 +1,19 @@
-import app from "../app"
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import { expect } from 'chai';
 
-const chai = require('chai')
-const chaiHttp = require('chai-http')
-const server = require('../app.ts')
-describe("GET /api/attempts/top=10", () => {
-    it('returns all attempts', (done) => {
-        chai.request(app).get('/api/attempts/top-10').end((err, res) => {
-            res.should.have.status(200);
-            done();
-        })
-    })
-})
+chai.use(chaiHttp);
+
+describe('API Endpoint Tests', () => {
+  it('should return top 10 attempts', (done) => {
+    chai.request('http://localhost:4001')
+      .get('/api/attempts/top-10')
+      .end((err:any, res:any) => {
+        if (err) done(err);
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.an('array');
+        expect(res.body.length).to.be.at.most(10);
+        done();
+      });
+  });
+});

@@ -11,26 +11,38 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTimer } from 'use-timer';
+import NavButton from '../navigation/NavButton';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box';
 
 const initialState = {
     success: '',
     tests_passed: '',
-    tests_failed: '',
-    failed_tests: [],
+    total_tests: '',
+    cases: [],
     llm_function: '',
-    returned: false,
     complete_success: false,
+    returned: false
 };
 
 interface StateType {
     success: string;
     tests_passed: string;
-    tests_failed: string;
+    total_tests: string;
+    cases: test_case[];
     llm_function: string;
-    failed_tests: number[];
-    returned: boolean;
     complete_success: boolean;
+    returned: boolean;
 }
+
+type test_case = {
+    testID: number; 
+    input : any[];
+    expected_output : any;
+    output : any;
+    pass : boolean;
+};
 
 const submitErrorInitialState = {
     errorMsg: '',
@@ -46,34 +58,46 @@ type response = {
     data: {
         success: string;
         tests_passed: string;
-        tests_failed: string;
-        failed_tests: number[];
+        total_tests: string;
         llm_function: string;
+        cases: test_case[];
     }
 }
 
 export default function Question() {
     const [user_input, setUserInput] = useState('');
+    const [reasoning, setReasoning] = useState('');
     const [state, setState] = useState<StateType>(initialState);
     const [submitError, setSubmitError] = useState<SubmitErrorStateType>(submitErrorInitialState);
     const { id } = useParams<{ id: string }>();
-    const { questionFetchState } = useQuestionFetch(id);
+    const [ stateID, setStateID ] = useState(Number(id));
+    const { questionFetchState, error } = useQuestionFetch(stateID);
     const [submissionLoading, setSubmissionLoading] = useState(false);
     const { time, start, reset } = useTimer({
         autostart: true,
     });
     const [ hint_used, setHintUsed ] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
     if (!id) {
         return <div>Error: Question ID is missing.</div>;
     }
+
+    const handleOpen = () => {
+        setModalOpen(true);
+    };
+
+    // Function to close the modal
+    const handleClose = () => {
+        setModalOpen(false);
+    };
 
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
 
         try {
             setSubmissionLoading(true);
-            const axios_response: response = await axios.post(`http://localhost:4001/api/question/submit/${id}`, {
+            const axios_response: response = await axios.post(`http://localhost:4001/api/question/submit/${stateID}`, {
                 user_input, 
                 time,
                 hint_used
@@ -82,14 +106,15 @@ export default function Question() {
                 setState({
                     success: axios_response.data.success,
                     tests_passed: axios_response.data.tests_passed,
-                    tests_failed: axios_response.data.tests_failed,
-                    failed_tests: axios_response.data.failed_tests,
+                    total_tests: axios_response.data.total_tests,
+                    cases: axios_response.data.cases,
                     llm_function: axios_response.data.llm_function,
                     returned: true,
-                    complete_success: (axios_response.data.tests_passed === axios_response.data.tests_failed)
+                    complete_success: (axios_response.data.tests_passed === axios_response.data.total_tests)
                 });
                 setSubmitError(submitErrorInitialState);
                 // Only reset question timer on successful response
+                setReasoning('');
                 reset();
                 start();
             } else {
@@ -114,6 +139,14 @@ export default function Question() {
         setSubmissionLoading(false);
     };
 
+    const nextQuestion = () => {
+        setUserInput('');
+        reset();
+        setHintUsed(false);
+        setState(initialState);
+        setStateID(stateID + 1);
+    }
+
     const toggleHint = () => {
         setHintUsed(!hint_used);
     };
@@ -130,15 +163,61 @@ export default function Question() {
         alertContent =
             (<Alert severity="success">
                 <AlertTitle>Success</AlertTitle>
-                {`Tests passed: ${state.tests_passed}/${state.tests_failed}`}
+                {`Tests passed: ${state.tests_passed}/${state.total_tests}`}
+                <br />
+                <Modal
+                    open={modalOpen}
+                    onClose={handleClose}
+                >
+                    <Box className="modal-style">
+                        <Typography id="terms-modal-title" variant="h6" align="center">
+                            Test Case Breakdown
+                        </Typography>
+                        {Object.entries(state.cases).map(([key, testCase]) => (
+                        <Typography id="terms-modal-description" variant="body1" gutterBottom>
+                            TestID: {key}  <br />
+                            Input: {testCase.input.toString()} <br />
+                            Result: {testCase.output.toString()}
+                            {(testCase.pass) ? (
+                                <> == </>
+                            ) : (<> != </>)}
+                            {testCase.expected_output.toString()} <br />
+                            Pass: {testCase.pass.toString()}
+                        </Typography>
+                        ))}
+                    </Box>
+                </Modal>
+                <span onClick={handleOpen} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>test case breakdown</span>
             </Alert>)
     } else if (state.returned) {
         alertContent =
             (<Alert severity="error" color='warning'>
                 <AlertTitle>Incorrect</AlertTitle>
-                {`Tests passed: ${state.tests_passed}/${state.tests_failed}`}
+                {`Tests passed: ${state.tests_passed}/${state.total_tests}`}
                 <br />
-                {`Failed test(s): ${state.failed_tests.map(index => index + 1).join(', ')}`}
+                <Modal
+                    open={modalOpen}
+                    onClose={handleClose}
+                >
+                    <Box className="modal-style">
+                        <Typography id="terms-modal-title" variant="h6" align="center">
+                            Test Case Breakdown
+                        </Typography>
+                        {Object.entries(state.cases).map(([key, testCase]) => (
+                        <Typography id="terms-modal-description" variant="body1" gutterBottom>
+                            TestID: {key}  <br />
+                            Input: {testCase.input.toString()} <br />
+                            Result: {testCase.output.toString()}
+                            {(testCase.pass) ? (
+                                <> == </>
+                            ) : (<> != </>)}
+                            {testCase.expected_output.toString()} <br />
+                            Pass: {testCase.pass.toString()}
+                        </Typography>
+                        ))}
+                    </Box>
+                </Modal>
+                <span onClick={handleOpen} style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>test case breakdown</span>
             </Alert>)
     } else {
         alertContent = null;
@@ -146,7 +225,9 @@ export default function Question() {
 
     return (
         <div className='question-container'>
-            <div className='box-container-out'>
+        {!error ? (
+            <>
+                <div className='box-container-out'>
                 <div className='box'>
                     <div className='question-header'>Output</div>
                     <SyntaxHighlighter language="javascript" showLineNumbers style={dark}
@@ -157,9 +238,9 @@ export default function Question() {
             </div>
             <div className='box-container-q'>
                 <div className='box'>
-                    <div className='question-header'>Question #{id}</div>
+                    <div className='question-header'>Question #{stateID}</div>
                     <SyntaxHighlighter language="javascript" showLineNumbers
-                        customStyle={{ display: 'flex', width: '100%', flex: 1, padding: 0 }} >
+                        customStyle={{ flex: 1, width: '100%', padding: 0 }} >
                         {questionFetchState.function_string}
                     </SyntaxHighlighter>
                     <div className='hint-container'>
@@ -170,24 +251,61 @@ export default function Question() {
                         id="standard-multiline-static"
                         label="Interpretation"
                         multiline
-                        rows={4}
+                        rows={2}
                         variant="filled"
                         fullWidth
                         required
-                        sx={{ display: 'flex' }}
+                        value={user_input}
                         onChange={
                             (e) => setUserInput(e.target.value)
                         }
                     />
                     <div className='footer'>
-                        <div className='spacer'></div>
-                        {submissionLoading ?
-                            (<CircularProgress color="secondary" />) :
-                            (<>{alertContent}</>)}
-                        <div onClick={handleSubmit} className="submit-button">Submit</div>
+                        <div className='footer-container'></div>
+                        <div className='footer-container'>
+                            {submissionLoading ?
+                                (<CircularProgress color="secondary" />) :
+                                (<>{alertContent}</>)}
+                        </div>
+                        <div className='footer-container-right'>
+                            {!state.complete_success ? 
+                                    (<div onClick={handleSubmit} className="submit-button">Submit</div>) :
+                                    (<div onClick={nextQuestion} className="submit-button">Next Question</div>)
+                                }   
+                        </div>
                     </div>
                 </div>
             </div>
+            {state.returned && !state.complete_success ? 
+            (<div className='box-container-q'>
+                <div className='box'>
+                <TextField
+                    id="standard-multiline-static"
+                    label="What are you changing and why?"
+                    multiline
+                    rows={2}
+                    variant="filled"
+                    fullWidth
+                    sx={{ display: 'flex', flex: 1 }}
+                    value={reasoning}
+                    onChange={
+                        (e) => setReasoning(e.target.value)
+                    }
+                />
+                </div>
+            </div>) : 
+                null
+            }
+        </>
+        ) : (
+                <>
+                    <div className='error-container'>
+                        <div className='error-content'>Invalid question id</div>
+                        <NavButton name={'Return To Question List'} style={'submit-button'} path='/questions'></NavButton>
+                    </div>
+                </>
+            )
+        }
         </div>
     )
 }

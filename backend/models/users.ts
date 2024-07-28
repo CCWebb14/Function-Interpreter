@@ -1,4 +1,5 @@
 import db from './db';
+import bcrypt from 'bcrypt'
 
 // Define the User type (adjust according to your actual user schema)
 export interface User {
@@ -61,5 +62,5 @@ export const createUser = async (username: string, password: string, firstName: 
 // Login funcs
 // Verify the user's password (simple string comparison no encryption yet)
 export const verifyPassword = async (user: User, password: string): Promise<boolean> => {
-    return user.password === password;
+    return await bcrypt.compare(password, user.password);
 };

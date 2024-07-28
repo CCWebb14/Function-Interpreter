@@ -18,7 +18,20 @@
     border-radius: 10px;
 }
 
-  .leaderboard-header {
+.leaderboard-header {
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-left: 40px;
+  padding-bottom: 10px;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc; 
+  transition: background-color 0.3s ease;
+}
+
+  .leaderboard-title {
     display: flex;
     align-items: flex-start;
     padding-top: 10px;
