@@ -104,6 +104,8 @@ export default function Question() {
                 user_input, 
                 time,
                 hint_used
+            }, {
+                timeout: 60000
             });
             if (axios_response.data.success) {
                 setState({
@@ -129,7 +131,7 @@ export default function Question() {
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 setSubmitError({
-                    errorMsg: 'Make sure no Javascript syntax is present. Please rephrase and try again.',
+                    errorMsg: 'Please rephrase and try again. The ollama container may still be pulling the model.',
                     error: true,
                 });
             } else {
