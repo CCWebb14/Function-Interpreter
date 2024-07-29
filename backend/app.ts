@@ -56,6 +56,10 @@ app.use('/api/question', questionRoutes);
 // Authenticated route to pull from question attempts
 app.use('/api/attempts', attemptsRoutes)
 
+//Tests
+app.use('/api/test', testRoutes);
+
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
