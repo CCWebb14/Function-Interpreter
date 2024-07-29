@@ -70,6 +70,11 @@ export default function Signup() {
         setHasOpenedModal(true);
     };
 
+    const validateEmail = (email: any) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    };
+
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
 
@@ -78,11 +83,27 @@ export default function Signup() {
             return;
         }
 
+        if (!validateEmail(email)) {
+            setMessage('Please enter a valid email address.');
+            return;
+        }
+
         const formData = { username, password, firstName, lastName, email }
 
         try {
             await axios.post('http://localhost:4001/api/users/register', formData);
             setMessage('You have successfully registered!');
+
+            setTimeout(() => {
+                setMessage('Redirecting to login page...');
+
+                // Wait for another 2 seconds before redirecting
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000);
+            }, 1000);
+
+
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 if (err.response && err.response.status === 400) {
@@ -130,10 +151,18 @@ export default function Signup() {
                                 </Typography>
                                 {/*https://mui.com/material-ui/api/typography/*/}
                                 <Typography id="terms-modal-description" variant="body1" gutterBottom>
-                                    {/* T&C here*/}
-                                    1) WIP <br />
-                                    2) WIP
+                                    <Typography id="terms-modal-description" variant="body1" gutterBottom>
+                                        1) <strong>Data Collection:</strong> We collect personal information such as your name, email address, and other details provided during signup and usage. <br /> <br />
+                                        2) <strong>Use of Information:</strong> Your data is used to provide and improve our services, communicate with you, and comply with legal obligations. <br /> <br />
+                                        3) <strong>Data Sharing:</strong> We do not sell or share your personal information with third parties without your explicit consent, except as required by law or for service provision (e.g., payment processing). <br /> <br />
+                                        4) <strong>Data Security:</strong> We use industry-standard security measures to protect your information from unauthorized access, disclosure, alteration, or destruction. <br /> <br />
+                                        5) <strong>Access and Correction:</strong> You can access, correct, or delete your personal information anytime by contacting our support team. <br /> <br />
+                                        < br />
+                                        <strong>Consent:</strong> By signing up, you consent to the collection, use, and sharing of your personal information as described above. You agree to follow our ethical guidelines and all applicable laws. <br />
+                                    </Typography>
+
                                 </Typography>
+
                             </Box>
                         </Modal>
                         <input

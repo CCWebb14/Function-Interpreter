@@ -7,11 +7,14 @@
     "test": "npx ts-mocha 'tests/*.ts'"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.17",
     "@types/knex": "^0.16.1",
     "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "chai-http": "^5.0.0",
     "connect-session-knex": "^5.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -39,6 +42,6 @@
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   }
 }

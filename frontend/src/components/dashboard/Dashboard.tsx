@@ -4,7 +4,7 @@ import '../../styles/dashboard.css'
 
 
 export default function Dashboard() {
-    const { profileFetchState } = useProfileFetch(); 
+    const { profileFetchState } = useProfileFetch();
 
     return (
         <div className='box-container-dashboard'>
@@ -28,7 +28,7 @@ export default function Dashboard() {
 
 
 
-    
 
-    
+
+
 

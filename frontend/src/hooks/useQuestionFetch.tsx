@@ -12,7 +12,8 @@ interface StateType {
     hint: string;
 }
 
-type response = {
+type Response = {
+    status: number,
     data: {
         success: string;
         function_string: string;
@@ -20,7 +21,7 @@ type response = {
     }
 }
 
-export const useQuestionFetch = (id: string | undefined) => {
+export const useQuestionFetch = (id: number | undefined) => {
 	// initial state as false
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
@@ -30,26 +31,28 @@ export const useQuestionFetch = (id: string | undefined) => {
     const FetchQuestion = async () => {
         try {
             setLoading(true);
-            const res : response = await axios.get(`http://localhost:4001/api/question/id/${id}`)
+            const res : Response = await axios.get(`http://localhost:4001/api/question/id/${id}`)
 
-            setQuestionFetchState(() => ({   
-                function_string : res.data.function_string,
-                hint: res.data.hint,
+            if (res.status >= 400) {
+                setError(true);
+            } else {
+                setQuestionFetchState(() => ({   
+                    function_string : res.data.function_string,
+                    hint: res.data.hint,
 			}));
+            }
+            
         } catch (err) {
             setError(true);
         }
         setLoading(false);
     }
 
-    // Use only on mount, [] is a dependancy array, ie: when do we want it to trigger
-	// if empty will run once
-	// Initial Render and search
+    // Use only on mount or when id changes, [] is a dependancy array, ie: when do we want it to trigger
 	useEffect(() => {
 		setQuestionFetchState(initialState);
-		// fetch question list
 		FetchQuestion();
-	}, []);
+	}, [id]);
 
     return { questionFetchState, loading, error };
 }
