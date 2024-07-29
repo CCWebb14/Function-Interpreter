@@ -10,7 +10,6 @@ export default function Dashboard() {
         <div className='box-container-dashboard'>
                     <div className='dashboard-header'>User Profile</div>
                     <div className='dashboard'><b>User Name: </b> {profileFetchState.userName}</div>
-                    <div className='dashboard'><b>User ID: </b> {profileFetchState.userID}</div>
                     <div className='dashboard'>
                     <b>Total Time Spent: </b> 
                     {profileFetchState.totalTime >= 60 

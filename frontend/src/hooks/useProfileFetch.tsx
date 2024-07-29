@@ -4,32 +4,26 @@ import axios from 'axios';
 
 // good to have an initial state to reset 
 const initialState = {
-    userID: 0,
     userName: '',
     totalTime: 0,
     attemptedQuestions: 0,
     passedQuestions: 0,
-    // passedQuestionsList: [],
 };
 
 interface StateType { 
-    userID: number;
     userName: string;
     totalTime: number;
     attemptedQuestions: number; 
     passedQuestions: number;
-    // passedQuestionsList: number[];
 }
 
 type response = { 
     data: {
         success: string; 
-        userID: number;
         userName: string;
         totalTime: number;
         attemptedQuestions: number; 
         passedQuestions: number;
-        // passedQuestionsList: number[];
     }
 }
 
@@ -44,16 +38,11 @@ export const useProfileFetch = () => {
         try { 
             setLoading(true); 
             const res : response = await axios.get('http://localhost:4001/api/users/dashboard')
-            console.log(res.data.totalTime)
-            console.log(typeof res.data.totalTime)
-
             setProfileFetchState(() => ({
-                userID : res.data.userID, 
                 userName: res.data.userName,
                 totalTime: res.data.totalTime, 
                 attemptedQuestions: res.data.attemptedQuestions,
                 passedQuestions: res.data.passedQuestions,
-                // passedQuestionsList: res.data.passedQuestionsList,
             }));
         } catch(err) {
             setError(true);
