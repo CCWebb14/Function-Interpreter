@@ -1,14 +1,15 @@
 import React from 'react';
 import '../../styles/app.css'
-import { useNavigate } from 'react-router-dom';
 import { useQuestionListFetch } from '../../hooks/useQuestionListFetch';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { ListItemButton } from '@mui/material';
+import { QuestionButton } from './Question_Button';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Question_Menu() {
     const { state, loading, error, setIsLoadingMore } =
-    useQuestionListFetch();
+    useQuestionListFetch('http://localhost:4001/api/question/list');
     const navigate = useNavigate();
 
     const handleNav = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, id : string) => {
@@ -16,21 +17,25 @@ export default function Question_Menu() {
         navigate(`/question/${id}`);
     };
 
+
     return(
         <div className='box-container'>
             <div className='box'>
-                <List sx={{
+                <List disablePadding sx={{
                     display: 'flex',
+                    flex: '1',
+                    width: '100%',
                     flexDirection: 'column',
                     overflow: 'auto',
                     borderStyle: 'solid',
                     borderWidth: '1px',
                     borderColor: 'lightgrey',
                 }}>
-                        {state.results.map((id : string) => (
+                        {Object.entries(state.results).map(([questionID, completionStatus]) => (
                         <>
-                            <ListItem key={id}>
-                                <ListItemButton onClick={(e) => handleNav(e, id)}>Question #{id}</ListItemButton>
+                            <ListItem disablePadding sx={{display: 'flex', width: '100%'}} key={questionID}>
+                                <QuestionButton questionID={questionID} completionStatus={completionStatus} clickFunction={handleNav} >
+                                </QuestionButton>
                             </ListItem>
                         </>
                         ))}
