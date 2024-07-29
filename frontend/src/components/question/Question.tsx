@@ -16,6 +16,9 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box';
 
+
+// tests_failed is number of failed tests
+// failed_tests is an array of failed tests 
 const initialState = {
     success: '',
     tests_passed: '',

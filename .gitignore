@@ -23,7 +23,13 @@ dist-ssr
 *.sln
 *.sw?
 
+# package-locks
+backend/package-lock.json
+frontend/package-lock.json
+
 # ollama
 ollama/history
 ollama/id_*
 ollama/models/
+
+
