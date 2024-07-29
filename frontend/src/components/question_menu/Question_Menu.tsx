@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function Question_Menu() {
-    const { state } = useQuestionListFetch();
+    const { state, loading, error, setIsLoadingMore } =
+    useQuestionListFetch('http://localhost:4001/api/question/list');
     const navigate = useNavigate();
 
     const handleNav = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, id : string) => {
