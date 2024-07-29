@@ -39,6 +39,7 @@ export default function Navbar() {
                     {isAuthenticated ? (
                         <>
                             <NavButton name={'Questions'} style={'navbar-button'} path={'/questions'} />
+                            <NavButton name={'Dashboard'} style={'navbar-button'} path={'/dashboard'}/>
                             <NavButton name={'Leaderboard'} style={'navbar-button'} path={'/leaderboard'} />
                             <NavButton name={'Logout'} style={'navbar-button-highlighted'} onClick={handleLogout} />
                         </>
