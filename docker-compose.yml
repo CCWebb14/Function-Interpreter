@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   ollama:
-    build: ./ollama
     image: ollama/ollama:latest
     ports:
         - 11434:11434
@@ -11,12 +10,7 @@ services:
     container_name: ollama
     pull_policy: always
     restart: always
-    healthcheck:
-      test: ["CMD", "/usr/local/bin/healthcheck.sh"]
-      interval: 30s
-      timeout: 10s
-      start_period: 5s
-      retries: 20
+    entrypoint: ["/bin/sh", "/root/.ollama/wait_for_ollama.sh"]
 
   backend:
     build: ./backend
@@ -28,10 +22,16 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=4001
+    healthcheck:
+      test: ["CMD-SHELL", "/bin/sh /app/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 20
 
   frontend:
     depends_on:
-      ollama:
+      backend:
        condition: service_healthy
     build: ./frontend
     ports:

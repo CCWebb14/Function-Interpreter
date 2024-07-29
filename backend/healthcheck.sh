@@ -1,6 +1,6 @@
 #!/bin/bash
 
-response=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:11434/api/show \
+response=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://ollama:11434/api/show \
     -H "Content-Type: application/json" \
     -d '{
         "name": "llama3"
