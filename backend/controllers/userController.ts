@@ -104,11 +104,7 @@ export const userProfile = async (req: Request, res: Response, next: NextFunctio
             // total passing questions 
             let passedQuestions = await getFullyPassedQuestionsCount(userid);
 
-            // // array of passing questions (might include; not sure)
-            // let passedQuestionsList = await getFullyPassedQuestionIDs(userid);
-
-
-            return res.status(200).json({ success: true, userID: userid, userName: username, totalTime: totaltime, 
+            return res.status(200).json({ success: true, userName: username, totalTime: totaltime, 
                 attemptedQuestions: attemptedQuestions, passedQuestions: passedQuestions});
     
         } catch (err) {

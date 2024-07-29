@@ -78,18 +78,4 @@ export const getFullyPassedQuestionsCount = async (userID: number): Promise<numb
     }
 };
 
-// // Function to get the list of fully passed question IDs for a user
-// export const getFullyPassedQuestionIDs = async (userID: number): Promise<number[]> => {
-//     try {
-//         const result = await db('attempts')
-//             .where({ userID })
-//             .andWhere('score', '=', db.raw('maxScore'))
-//             .distinct('questionID')
-//             .pluck('questionID');
-
-//         return result;
-//     } catch (error) {
-//         throw new Error('Failed to get the fully passed question IDs from DB');
-//     }
-// };
 
