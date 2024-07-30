@@ -131,7 +131,7 @@ export default function Question() {
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 setSubmitError({
-                    errorMsg: 'Please rephrase and try again. The ollama container may still be pulling the model.',
+                    errorMsg: 'Please rephrase and try again. No code block was generated.',
                     error: true,
                 });
             } else {
@@ -182,11 +182,8 @@ export default function Question() {
                         <Typography id="terms-modal-description" variant="body1" gutterBottom>
                             TestID: {key}  <br />
                             Input: {testCase.input.toString()} <br />
-                            Result: {testCase.output.toString()}
-                            {(testCase.pass) ? (
-                                <> == </>
-                            ) : (<> != </>)}
-                            {testCase.expected_output.toString()} <br />
+                            Output: {testCase.output.toString()} <br />
+                            Expected Output: {testCase.expected_output.toString()} <br />
                             Pass: {testCase.pass.toString()}
                         </Typography>
                         ))}
@@ -212,11 +209,8 @@ export default function Question() {
                         <Typography id="terms-modal-description" variant="body1" gutterBottom>
                             TestID: {key}  <br />
                             Input: {testCase.input.toString()} <br />
-                            Result: {testCase.output.toString()}
-                            {(testCase.pass) ? (
-                                <> == </>
-                            ) : (<> != </>)}
-                            {testCase.expected_output.toString()} <br />
+                            Output: {testCase.output.toString()} <br />
+                            Expected Output: {testCase.expected_output.toString()} <br />
                             Pass: {testCase.pass.toString()}
                         </Typography>
                         ))}

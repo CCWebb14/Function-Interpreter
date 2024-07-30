@@ -41,14 +41,21 @@ async function callOpenAiApi(user_input: string): Promise<string> {
 }
 
 function parseMarkdown(api_output: string): string {
-  const js_pattern = /```([\s\S]+?)```/;
-  const match = api_output.match(js_pattern);
+  const js_pattern = /```javascript([\s\S]+?)```/
+  const js_match = api_output.match(js_pattern);
 
-  if (match && match[1]) {
-    return match[1];
-  } else {
-    throw new Error('No javascript markdown block found');
-  }
+  if (js_match && js_match[1]) {
+    return js_match[1];
+  } 
+
+  const md_pattern = /```([\s\S]+?)```/
+  const md_match = api_output.match(md_pattern);
+
+  if (md_match && md_match[1]) {
+    return md_match[1];
+  } 
+
+  throw new Error('No markdown block found');
 }
 
 function extractFunctionName(function_code: string): string {
