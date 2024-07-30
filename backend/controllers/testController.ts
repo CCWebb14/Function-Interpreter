@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import db from '../models/db'; // Adjust the path to your database module
+import { registerAttempt as registerAttemptModel, getAttemptsByUserAndQuestion as getAttemptsByUserAndQuestionModel } from '../models/attempt';
 
 export const createTestTable = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -55,5 +56,34 @@ export const dropTestTable = async (req: Request, res: Response, next: NextFunct
         return res.status(200).json({ success: true, message: 'Test table dropped successfully.' });
     } catch (error) {
         return res.status(500).json({ success: false, message: `Error dropping test table.` });
+    }
+};
+
+export const registerAttempt = async (req: Request, res: Response) => {
+    try {
+        console.log('Registering attempt:', req.body); // Add this line
+        const result = await registerAttemptModel(req.body);
+        console.log('Attempt registered:', result); // Add this line
+        res.status(201).json(result);
+    } catch (error: any) {
+        console.error('Error registering attempt:', error); // Add this line
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// Controller to get attempts by user and question
+export const getAttemptsByUserAndQuestion = async (req: Request, res: Response) => {
+    const { userID, questionID } = req.params;
+    try {
+        console.log(`Fetching attempts for userID: ${userID}, questionID: ${questionID}`);
+        const attempts = await getAttemptsByUserAndQuestionModel(parseInt(userID), parseInt(questionID));
+        console.log('Attempts found:', attempts);
+        if (!attempts || attempts.length === 0) {
+            return res.status(404).json({ success: false, message: 'No attempts found' });
+        }
+        res.status(200).json({ success: true, data: attempts });
+    } catch (error: any) {
+        console.error('Error retrieving attempts:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
 };
