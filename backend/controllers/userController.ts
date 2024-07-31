@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { findUserByUsername, findUserByEmail, createUser, User } from '../models/users';
 import passport from 'passport';
-import { getTotalTimeTaken, getCompletedQuestionsCount, getFullyPassedQuestionsCount} from '../models/attempt';
+import { getTotalTimeTaken, getCompletedQuestionsCount, getFullyPassedQuestionsCount } from '../models/attempt';
 import bcrypt from 'bcrypt'; // Ensure bcrypt is imported
 
 //Signup Controllers
@@ -87,13 +87,13 @@ export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // User Profile Controllers
-export const userProfile = async (req: Request, res: Response, next: NextFunction)=> {
+export const userProfile = async (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
-        try { 
-            const user = req.user as User; 
+        try {
+            const user = req.user as User;
             const userid = user.userID;
             const username = user.username;
-            
+
 
             // total time spent attempting questions 
             let totaltime = await getTotalTimeTaken(userid);
@@ -104,12 +104,14 @@ export const userProfile = async (req: Request, res: Response, next: NextFunctio
             // total passing questions 
             let passedQuestions = await getFullyPassedQuestionsCount(userid);
 
-            return res.status(200).json({ success: true, userName: username, totalTime: totaltime, 
-                attemptedQuestions: attemptedQuestions, passedQuestions: passedQuestions});
-    
+            return res.status(200).json({
+                success: true, userName: username, totalTime: totaltime,
+                attemptedQuestions: attemptedQuestions, passedQuestions: passedQuestions
+            });
+
         } catch (err) {
-            return res.status(401).json({ success: false, message: 'Not authenticated'});
+            return res.status(401).json({ success: false, message: 'Not authenticated' });
         }
-      
+
     }
 };

@@ -17,7 +17,6 @@ export const findUserByUsername = async (username: string): Promise<User | null>
         const user = await db('users').where({ username }).first();
         return user || null;
     } catch (error) {
-        console.error('Error finding user by username:', error);
         throw error;
     }
 };
@@ -27,7 +26,6 @@ export const findUserByEmail = async (email: string): Promise<User | null> => {
         const user = await db('users').where({ email }).first();
         return user || null;
     } catch (error) {
-        console.error('Error finding user by email:', error);
         throw error;
     }
 };
@@ -37,7 +35,6 @@ export const findUserById = async (userID: number): Promise<User | null> => {
         const user = await db('users').where({ userID }).first();
         return user || null;
     } catch (error) {
-        console.error('Error finding user by ID:', error);
         throw error;
     }
 };
@@ -54,7 +51,6 @@ export const createUser = async (username: string, password: string, firstName: 
         // Custom success message instead of .returning() from knex
         return { success: true, message: 'User created successfully' };
     } catch (error) {
-        console.error('Error creating user:', error);
         throw error;
     }
 };
