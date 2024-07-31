@@ -59,6 +59,75 @@ export const dropTestTable = async (req: Request, res: Response, next: NextFunct
     }
 };
 
+export const leaderboardTables = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // Create users table
+        await db.schema.createTable('users', (table) => {
+            table.increments('userID').primary();
+            table.string('username').notNullable();
+            table.string('password').notNullable();
+            table.string('firstName').notNullable();
+            table.string('lastName').notNullable();
+            table.string('email').notNullable();
+        });
+
+        // Create attempts table
+        await db.schema.createTable('attempts', (table) => {
+            table.increments('attemptID').primary();
+            table.integer('userID').unsigned().notNullable().references('userID').inTable('users').onDelete('CASCADE');
+            table.integer('questionID').notNullable();
+            table.integer('score').notNullable();
+            table.integer('maxScore').notNullable();
+            table.integer('timeTaken').notNullable();
+            table.boolean('hintUsed').notNullable();
+        });
+
+        return res.status(200).json({ success: true, message: 'Attempts and Users tables created successfully.' });
+    } catch (error) {
+        console.error('Error creating tables:', error);
+        return res.status(500).json({ success: false, message: 'Error creating attempts and users tables.' });
+    }
+};
+
+export const insertUserData = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { username, password, firstName, lastName, email } = req.body;
+
+        await db('users').insert({
+            username,
+            password,
+            firstName,
+            lastName,
+            email
+        });
+
+        return res.status(200).json({ success: true, message: 'User data inserted successfully.' });
+    } catch (error) {
+        console.error('Error inserting user data:', error);
+        return res.status(500).json({ success: false, message: 'Error inserting user data.' });
+    }
+};
+
+export const insertAttemptData = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { userID, questionID, score, maxScore, timeTaken, hintUsed } = req.body;
+
+        await db('attempts').insert({
+            userID,
+            questionID,
+            score,
+            maxScore,
+            timeTaken,
+            hintUsed
+        });
+
+        return res.status(200).json({ success: true, message: 'Attempt data inserted successfully.' });
+    } catch (error) {
+        console.error('Error inserting attempt data:', error);
+        return res.status(500).json({ success: false, message: 'Error inserting attempt data.' });
+    }
+};
+
 export const registerAttempt = async (req: Request, res: Response) => {
     try {
         console.log('Registering attempt:', req.body); // Add this line
