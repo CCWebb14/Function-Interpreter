@@ -171,7 +171,7 @@ export function runTests() {
 
         it('should register an attempt with hint used', async function () {
             const attempt = {
-                userID: 3,
+                userID: 1,
                 questionID: 2,
                 score: 8,
                 maxScore: 10,
@@ -192,7 +192,7 @@ export function runTests() {
 
         it('should register an attempt without hint used', async function () {
             const attempt = {
-                userID: 3,
+                userID: 1,
                 questionID: 2,
                 score: 9,
                 maxScore: 10,

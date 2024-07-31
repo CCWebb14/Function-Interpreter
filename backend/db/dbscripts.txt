@@ -1,5 +1,9 @@
 -- sqlite3 query to create tables
 
+-- RESET AUTOINCREMENT
+UPDATE sqlite_sequence SET seq = 0 WHERE name = 'users';
+UPDATE sqlite_sequence SET seq = 0 WHERE name = 'attempts';
+
 -- Create user table if it doesn't exist
 CREATE TABLE users (
     userID INTEGER PRIMARY KEY AUTOINCREMENT,
