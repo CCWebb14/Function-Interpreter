@@ -4,6 +4,11 @@
 UPDATE sqlite_sequence SET seq = 0 WHERE name = 'users';
 UPDATE sqlite_sequence SET seq = 0 WHERE name = 'attempts';
 
+--MOCK USER FOR UNIT TEST
+--insert
+INSERT INTO users (username, password, firstName, lastName, email) VALUES ('unittestuser', 'password123', 'unit', 'test', 'unittestuser@example.com');
+
+
 -- Create user table if it doesn't exist
 CREATE TABLE users (
     userID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -13,9 +18,6 @@ CREATE TABLE users (
     lastName TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE
 );
-
---insert
-INSERT INTO users (username, password, firstName, lastName, email) VALUES ('unittestuser', 'password123', 'unit', 'test', 'unittestuser@example.com');
 
 -- Attempts  table
 CREATE TABLE IF NOT EXISTS attempts (
