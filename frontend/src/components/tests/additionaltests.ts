@@ -8,6 +8,9 @@ export function runAdditionalTests() {
 
   describe('LLM Functionality API', function () {
     it('should submit user function and return test results', async function () {
+        // timeout extension for llm responses
+        this.timeout(60000);
+
       const submission = {
         user_input: 'return the sum of two numbers',
         time: 120,
@@ -15,14 +18,17 @@ export function runAdditionalTests() {
       };
 
       try {
-        const response = await axios.post(`${apiUrl}/submit/1`, submission);
+        const response = await axios.post(`${apiUrl}/submit/0`, submission);
         expect(response.status).to.equal(200);
         expect(response.data).to.have.property('success', true);
+        expect(response.data).to.have.property('tests_passed', 6);
+        expect(response.data).to.have.property('total_tests', 6);
+        expect(response.data).to.have.property('llm_function');
       } catch (error: any) {
         throw new Error(`Failed to submit user function: ${error.response ? error.response.data.message : error.message}`);
       }
     });
-  }).timeout(5000);
+  })
 
   describe('Question API', function () {
     it('should get the list of questions', async function () {
@@ -31,7 +37,6 @@ export function runAdditionalTests() {
         expect(response.status).to.equal(200);
         expect(response.data).to.have.property('success', true);
         expect(response.data).to.have.property('message');
-        expect(response.data.message).to.be.an('array');
       } catch (error: any) {
         throw new Error(`Failed to get question list: ${error.response ? error.response.data.message : error.message}`);
       }

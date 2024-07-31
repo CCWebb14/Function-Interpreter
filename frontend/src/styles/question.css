@@ -89,11 +89,6 @@
     justify-content: flex-end;
 }
 
-.test {
-    height: 1000px;
-    width: 1000px;
-}
-
 .hint-container {
     display: flex;
     flex-direction: row;
