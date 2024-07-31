@@ -52,6 +52,16 @@ export default function Signup() {
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
 
+        if (!username) {
+            setMessage('Username is required.');
+            return;
+        }
+
+        if (!password) {
+            setMessage('Password is required.');
+            return;
+        }
+
         if (!consent) {
             setMessage('Please read our T&C.');
             return;
