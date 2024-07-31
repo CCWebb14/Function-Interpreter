@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import 'mocha/mocha.js'; // Use the browser-specific Mocha build
-import { runTests } from './usertest';
-import { runHintTests } from './hinttest';
-import { runAdditionalTests } from './additionaltests';
+import { runTests } from './unit'
 
 export default function Test_Suite() {
 
@@ -10,8 +8,6 @@ export default function Test_Suite() {
         // Initialize Mocha
         mocha.setup('bdd');
         runTests();
-        runHintTests();
-        runAdditionalTests();
         // Run Mocha
         mocha.run();
 
