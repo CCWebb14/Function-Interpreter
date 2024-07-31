@@ -14,7 +14,8 @@ This is a web application that assesses novice-level code comprehension using ge
 
 ## Instructions for use
 
-### Starting the service
+### Docker Compose 
+#### Starting the service
 
 ```sh
 docker compose up -d
