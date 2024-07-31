@@ -78,4 +78,12 @@ export const getFullyPassedQuestionsCount = async (userID: number): Promise<numb
     }
 };
 
-
+// Retrieve attempts by user and question
+export const getAttemptsByUserAndQuestion = async (userID: number, questionID: number) => {
+    try {
+        const attempts = await db('attempts').where({ userID, questionID });
+        return attempts;
+    } catch (error) {
+        throw new Error('Failed to retrieve attempts');
+    }
+};
