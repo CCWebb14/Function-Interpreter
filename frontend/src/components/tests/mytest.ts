@@ -168,7 +168,6 @@ export function runTests() {
         it('Check response contains correct properties', async function () {
             const response = await axios.get(`${apiUrl3}/top-ten`);
             const result = response.data.message;
-            console.log('here: ', result)
             expect(result[0]).to.have.property('userID');
             expect(result[0]).to.have.property('username');
             expect(result[0]).to.have.property('totalScore');
@@ -185,7 +184,6 @@ export function runTests() {
             let prev = Infinity
             let isAsc = true
             for (const {totalScore} of result) {
-                console.log(totalScore, ' <= ', prev)
                 if (totalScore > prev) {
                   isAsc = false
                 }
