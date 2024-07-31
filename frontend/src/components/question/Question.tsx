@@ -208,8 +208,8 @@ export default function Question() {
                         {Object.entries(state.cases).map(([key, testCase]) => (
                         <Typography id="terms-modal-description" variant="body1" gutterBottom>
                             TestID: {key}  <br />
-                            Input: {testCase.input.toString()} <br />
-                            Output: {testCase.output.toString()} <br />
+                            Input: {testCase.input ? testCase.input.toString() : 'undefined'} <br />
+                            Output: {testCase.output ? testCase.output.toString() : 'undefined'} <br />
                             Expected Output: {testCase.expected_output.toString()} <br />
                             Pass: {testCase.pass.toString()}
                         </Typography>
