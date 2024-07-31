@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import axios from 'axios';
 
+
 // Sample function to test
 export function add(a: number, b: number): number {
     return a + b;
@@ -12,6 +13,7 @@ export function runTests() {
     // apiLinks
     const apiUrl = 'http://localhost:4001/api/test';
     const apiUrl2 = 'http://localhost:4001/api/users';
+    const apiUrl3 = 'http://localhost:4001/api/attempts';
 
     describe('User Registration API', function () {
 
@@ -161,6 +163,16 @@ export function runTests() {
             expect(result).to.have.property('message', 'Test table dropped successfully.');
         });
     });
+
+    describe('Leaderboard DB Test', function () {
+        it('check returning correct length and data', async function () {
+            const response = await axios.get(`${apiUrl3}/top-10`);
+            const result = response.data;
+            expect(result).to.have.lengthOf.at.most(10);
+            expect(result[0]).to.have.property('username');
+            expect(result[0]).to.have.property('totalScore');
+        });
+      });
 
 
 }

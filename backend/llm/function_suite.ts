@@ -56,7 +56,7 @@ export const Function_Suite_Map: { [id: number]: Function_Suite } = {
     },
     3: {
         // firstInstance function 
-        function_string: "function doo(arr,num) {\n\tfor (let i = 0; i < arr.length; i++) {\n\t\tif (arr[i] === num) {\n\t\t\treturn num;\n\t\t}\n\t}\n\treturn -1;\n}",
+        function_string: "function doo(arr,num) {\n\tfor (let i = 0; i < arr.length; i++) {\n\t\tif (arr[i] === num) {\n\t\t\treturn i;\n\t\t}\n\t}\n\treturn -1;\n}",
         tests: [
             { parameters: [[1, 2, 3, 4], 1], expected_result: 0 },
             { parameters: [[1, 1, 2, 3], 1], expected_result: 0 },
