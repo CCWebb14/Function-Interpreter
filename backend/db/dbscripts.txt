@@ -1,14 +1,17 @@
 -- sqlite3 query to create tables
 
 -- Create user table if it doesn't exist
-CREATE TABLE IF NOT EXISTS users (
-    userID INTEGER PRIMARY KEY,
-    username TEXT NOT NULL,
+CREATE TABLE users (
+    userID INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    firstName TEXT,
-    lastName TEXT,
-    email TEXT
+    firstName TEXT NOT NULL,
+    lastName TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE
 );
+
+--insert
+INSERT INTO users (username, password, firstName, lastName, email) VALUES ('unittestuser', 'password123', 'unit', 'test', 'unittestuser@example.com');
 
 -- Attempts  table
 CREATE TABLE IF NOT EXISTS attempts (

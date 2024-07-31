@@ -147,6 +147,24 @@ export function runTests() {
         });
     });
 
+    describe('User Dashboard API', function () {
+
+        it('should contain user statistics', async function () {
+            try {
+                const response = await axios.get(`${userApi}/dashboard`);
+                expect(response.status).to.equal(200);
+                expect(response.data).to.have.property('success', true);
+                expect(response.data).to.have.property('userName');
+                expect(response.data).to.have.property('totalTime');
+                expect(response.data).to.have.property('attemptedQuestions');
+                expect(response.data).to.have.property('passedQuestions');
+            } catch (error: any) {
+                throw new Error(`Failed to log in: ${error.response ? error.response.data.message : error.message}`);
+
+            }
+        });
+    });
+
 
     describe('Hint Functionality API', function () {
         const attemptsApiUrl = `${mockApi}/attempts`;
@@ -289,6 +307,7 @@ export function runTests() {
             }
         });
     });
+
 
     describe('Logout api test', function () {
         it('should successfully log user out', async function () {
