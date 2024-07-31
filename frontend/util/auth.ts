@@ -7,7 +7,6 @@ export const checkAuth = async () => {
         const response = await axios.get('http://localhost:4001/api/users/checkAuth');
         return response.data.success;
     } catch (error) {
-        console.error('Error checking authentication status:', error);
         return false;
     }
 };

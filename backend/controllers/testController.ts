@@ -130,9 +130,7 @@ export const insertAttemptData = async (req: Request, res: Response, next: NextF
 
 export const registerAttempt = async (req: Request, res: Response) => {
     try {
-        console.log('Registering attempt:', req.body); // Add this line
         const result = await registerAttemptModel(req.body);
-        console.log('Attempt registered:', result); // Add this line
         res.status(201).json(result);
     } catch (error: any) {
         console.error('Error registering attempt:', error); // Add this line
@@ -144,15 +142,12 @@ export const registerAttempt = async (req: Request, res: Response) => {
 export const getAttemptsByUserAndQuestion = async (req: Request, res: Response) => {
     const { userID, questionID } = req.params;
     try {
-        console.log(`Fetching attempts for userID: ${userID}, questionID: ${questionID}`);
         const attempts = await getAttemptsByUserAndQuestionModel(parseInt(userID), parseInt(questionID));
-        console.log('Attempts found:', attempts);
         if (!attempts || attempts.length === 0) {
             return res.status(404).json({ success: false, message: 'No attempts found' });
         }
         res.status(200).json({ success: true, data: attempts });
     } catch (error: any) {
-        console.error('Error retrieving attempts:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 };

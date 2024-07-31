@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom';
 import { checkAuth } from '../../../util/auth';
 
-
 export default function Signup() {
 
     const navigate = useNavigate();
@@ -32,31 +31,6 @@ export default function Signup() {
     const [consent, setConsent] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [hasOpenedModal, setHasOpenedModal] = useState(false);
-
-
-    /*OLD SCHOOL WAY BUT GOOD FOR CLARITY, superseeded by Google.com's spread operator (see below)
-    setFormData((prevFormData) => {
-        // Create a new object to hold the updated state
-        const updatedFormData = {
-          username: prevFormData.username,
-          password: prevFormData.password,
-          firstName: prevFormData.firstName,
-          lastName: prevFormData.lastName,
-          email: prevFormData.email,
-        };
-      
-        // Update the specific field based on the name
-        if (name === 'username') {
-          updatedFormData.username = value;
-        } else if (name === 'password') {
-          updatedFormData.password = value;
-        } else if (name === 'firstName') {
-          updatedFormData.firstName = value;
-        } else if (name === 'lastName') {
-          updatedFormData.lastName = value;
-        } else if (name === 'email') {
-          updatedFormData.email = value;
-        }*/
 
     //MaterialUI Modal
     // Function to open the modal

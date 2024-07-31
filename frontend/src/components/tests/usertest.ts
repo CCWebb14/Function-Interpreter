@@ -1,12 +1,6 @@
 import { expect } from 'chai';
 import axios from 'axios';
 
-
-// Sample function to test
-export function add(a: number, b: number): number {
-    return a + b;
-}
-
 // Define the test suite
 export function runTests() {
 
@@ -168,6 +162,7 @@ export function runTests() {
         it('Check response contains correct properties', async function () {
             const response = await axios.get(`${apiUrl3}/top-ten`);
             const result = response.data.message;
+            console.log('here: ', result)
             expect(result[0]).to.have.property('userID');
             expect(result[0]).to.have.property('username');
             expect(result[0]).to.have.property('totalScore');
@@ -180,18 +175,19 @@ export function runTests() {
         it('Check Leaderboard in ascending order', async function () {
             const response = await axios.get(`${apiUrl3}/top-ten`);
             const result = response.data.message;
-            
+
             let prev = Infinity
             let isAsc = true
-            for (const {totalScore} of result) {
+            for (const { totalScore } of result) {
+                console.log(totalScore, ' <= ', prev)
                 if (totalScore > prev) {
-                  isAsc = false
+                    isAsc = false
                 }
                 prev = totalScore;
             }
             expect(isAsc).to.equal(true)
         });
-      });
+    });
 
 
 }

@@ -8,17 +8,15 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function Question_Menu() {
-    const { state, loading, error, setIsLoadingMore } =
-    useQuestionListFetch('http://localhost:4001/api/question/list');
+    const { state } = useQuestionListFetch('http://localhost:4001/api/question/list');
     const navigate = useNavigate();
 
-    const handleNav = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, id : string) => {
+    const handleNav = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>, id: string) => {
         event.preventDefault();
         navigate(`/question/${id}`);
     };
 
-
-    return(
+    return (
         <div className='box-container'>
             <div className='box'>
                 <List disablePadding sx={{
@@ -31,15 +29,15 @@ export default function Question_Menu() {
                     borderWidth: '1px',
                     borderColor: 'lightgrey',
                 }}>
-                        {Object.entries(state.results).map(([questionID, completionStatus]) => (
+                    {Object.entries(state.results).map(([questionID, completionStatus]) => (
                         <>
-                            <ListItem disablePadding sx={{display: 'flex', width: '100%'}} key={questionID}>
+                            <ListItem disablePadding sx={{ display: 'flex', width: '100%' }} key={questionID}>
                                 <QuestionButton questionID={questionID} completionStatus={completionStatus} clickFunction={handleNav} >
                                 </QuestionButton>
                             </ListItem>
                         </>
-                        ))}
-                        
+                    ))}
+
                 </List>
             </div>
         </div>
