@@ -1,3 +1,5 @@
+// this query takes the top score for each user on each 
+// question, sums them, and returns total
 const top_ten_query = () => {
     return `
 SELECT u.userID, u.username, totalScores.totalScore
