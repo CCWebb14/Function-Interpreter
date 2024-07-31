@@ -3,6 +3,7 @@ import 'mocha/mocha.js'; // Use the browser-specific Mocha build
 import { runTests } from './usertest';
 import { runHintTests } from './hinttest';
 import { runAdditionalTests } from './additionaltests';
+import { runDashboardTests } from './dashboardtests';
 
 export default function Test_Suite() {
 
@@ -12,6 +13,7 @@ export default function Test_Suite() {
         runTests();
         runHintTests();
         runAdditionalTests();
+        runDashboardTests(); 
         // Run Mocha
         mocha.run();
 
