@@ -165,12 +165,33 @@ export function runTests() {
     });
 
     describe('Leaderboard DB Test', function () {
-        it('check returning correct length and data', async function () {
-            const response = await axios.get(`${apiUrl3}/top-10`);
-            const result = response.data;
-            expect(result).to.have.lengthOf.at.most(10);
+        it('Check response contains correct properties', async function () {
+            const response = await axios.get(`${apiUrl3}/top-ten`);
+            const result = response.data.message;
+            console.log('here: ', result)
+            expect(result[0]).to.have.property('userID');
             expect(result[0]).to.have.property('username');
             expect(result[0]).to.have.property('totalScore');
+        });
+        it('Check Leaderboard max 10 entries', async function () {
+            const response = await axios.get(`${apiUrl3}/top-ten`);
+            const result = response.data.message;
+            expect(result).to.have.lengthOf.at.most(10);
+        });
+        it('Check Leaderboard in ascending order', async function () {
+            const response = await axios.get(`${apiUrl3}/top-ten`);
+            const result = response.data.message;
+            
+            let prev = Infinity
+            let isAsc = true
+            for (const {totalScore} of result) {
+                console.log(totalScore, ' <= ', prev)
+                if (totalScore > prev) {
+                  isAsc = false
+                }
+                prev = totalScore;
+            }
+            expect(isAsc).to.equal(true)
         });
       });
 
