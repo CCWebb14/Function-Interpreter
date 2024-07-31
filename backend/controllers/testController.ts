@@ -161,6 +161,9 @@ export const deleteMockUser = async (req: Request, res: Response, next: NextFunc
         // Delete user with username 'mockuser2'
         await db('users').where({ username: 'mockuser2' }).del();
 
+        // Delete attempts where userID is 1
+        await db('attempts').where({ userID: 1 }).del();
+
         return res.status(200).json({ success: true, message: 'Mock users deleted successfully.' });
     } catch (error) {
         return res.status(500).json({ success: false, message: 'Error deleting users.' });

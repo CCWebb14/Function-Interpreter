@@ -4,15 +4,13 @@ import axios from 'axios';
 // Define the test suite
 export function runTests() {
 
-    //For sessions
-    let cookie: string
     // API Endpoints
     const mockApi = 'http://localhost:4001/api/test';
     const userApi = 'http://localhost:4001/api/users';
     const attemptsApi = 'http://localhost:4001/api/attempts';
     const questionApi = 'http://localhost:4001/api/question';
 
-    before(async function () {
+    after(async function () {
         try {
             await axios.delete(`${mockApi}/delete-mock-users`);
             console.log('Mock users deleted successfully.');
@@ -147,7 +145,6 @@ export function runTests() {
                 expect(response.data).to.have.property('success', true);
                 expect(response.data).to.have.property('user');
                 expect(response.data.user).to.have.property('username', 'mockuser1');
-                cookie = response.headers['set-cookie']?.[0] || '';
 
             } catch (error: any) {
                 throw new Error(`Failed to log in: ${error.response ? error.response.data.message : error.message}`);
@@ -253,7 +250,6 @@ export function runTests() {
             try {
                 const response = await axios.get(`${attemptsApi}/top-ten`);
                 const result = response.data.message;
-                console.log('here: ', result)
                 expect(result[0]).to.have.property('userID');
                 expect(result[0]).to.have.property('username');
                 expect(result[0]).to.have.property('totalScore');
@@ -280,7 +276,7 @@ export function runTests() {
                 let prev = Infinity
                 let isAsc = true
                 for (const { totalScore } of result) {
-                    console.log(totalScore, ' <= ', prev)
+                    // console.log(totalScore, ' <= ', prev)
                     if (totalScore > prev) {
                         isAsc = false
                     }
@@ -298,9 +294,6 @@ export function runTests() {
         it('should successfully log user out', async function () {
             try {
                 const response = await axios.post(`${userApi}/logout`, {}, {
-                    headers: {
-                        Cookie: cookie, // Send the session cookie to authenticate the logout request
-                    },
                     withCredentials: true,
                 });
                 expect(response.status).to.equal(200);
@@ -316,9 +309,6 @@ export function runTests() {
         it('should not allow access to protected route after logout', async function () {
             try {
                 await axios.get(`${attemptsApi}/top-ten`, {
-                    headers: {
-                        Cookie: cookie, // Send the session cookie to authenticate the request
-                    },
                     withCredentials: true,
                 });
                 throw new Error('Should not have access to the protected route');
