@@ -1,10 +1,12 @@
 
-
+// Interface for a single test
+// Input parameters and expected result
 export interface Function_Test {
     parameters: any[];
     expected_result: any;
 }
 
+// Interface for a function suite (content associated to a single question)
 export interface Function_Suite {
     function_string: string;
     tests: Function_Test[];
@@ -12,6 +14,8 @@ export interface Function_Suite {
     hint: string;
 }
 
+// Map that associates a question id to a a function suite
+// All questions are globally stored here
 export const Function_Suite_Map: { [id: number]: Function_Suite } = {
     0: {
         // sum function 

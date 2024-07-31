@@ -10,6 +10,7 @@ interface QuestionButtonProps extends ListItemButtonBaseProps {
     clickFunction: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, id : string) => void;
 }
 
+// Functionality for the question button component, rendering based off of completion status
 export const QuestionButton: React.FC<QuestionButtonProps> = ({ questionID, completionStatus, clickFunction }) => {
     let icon : React.ReactNode;
     let backgroundColor : string | undefined;

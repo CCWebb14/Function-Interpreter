@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-type qMap = {
-    [questionID: number]: number;
-};
+
 
 // Initial state for resetting
 const initialState = {
 	results: [],
 };
 
+// Interface for state type definitions
 interface StateType {
     results: qMap;
 }
 
+// Type definition for expected json response from api
 type response = {
     data: {
         success: string;
@@ -21,11 +21,16 @@ type response = {
     }
 }
 
+// Type definition for qMap object
+// Maps question id to completion status (0 (unattempted), 1 (attempted), 2 (completed))
+type qMap = {
+    [questionID: number]: number;
+};
+
+// React hook to fetch data specified based off passed path
 export const useQuestionListFetch = (path : string) => {
-	// initial state as false
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
-    // add initial state from above
     const [state, setState] = useState<StateType>(initialState);
 
     const FetchQuestionList = async () => {
@@ -43,11 +48,9 @@ export const useQuestionListFetch = (path : string) => {
     }
 
     // Use only on mount, [] is a dependancy array, ie: when do we want it to trigger
-	// if empty will run once
-	// Initial Render and search
+	// empty: will run on mount
 	useEffect(() => {
 		setState(initialState);
-		// fetch question list
 		FetchQuestionList();
 	}, []);
 

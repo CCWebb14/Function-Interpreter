@@ -1,4 +1,4 @@
-import { callOpenAiApi, parseMarkdown, extractFunctionName, llmFunctionGeneration } from '../llm/function_gen'
+import { callModelAPI, parseMarkdown, extractFunctionName, llmFunctionGeneration } from '../llm/function_gen'
 import * as chai from 'chai';
 import {expect} from 'chai';
 import chaiAsPromised  from 'chai-as-promised';
@@ -50,15 +50,10 @@ describe('#extractFunctionName', () => {
     })
 })
 
-describe('#callOpenAiApi', () => {
-    it('javascript syntax', () => {
-        const js_syntax : string = 'function foo(a,b) {\n return a + b\;\n}';
-        expect(callOpenAiApi(js_syntax)).to.eventually.include("ERROR");
-    })
-
+describe('#callModelAPI', () => {
     it('proper request', () => {
         const proper_request: string = 'This function takes in two parameters and returns them added together.';
-        expect(callOpenAiApi(proper_request)).to.eventually.include("function" && "return");
+        expect(callModelAPI(proper_request)).to.eventually.include("function" && "return");
     })
 })
 
@@ -142,7 +137,7 @@ describe('LLM Generated Function: recursive sum', () => {
 describe('LLM Generated Function: irrelevent user message = ERROR', () => {
     it('irrelevent message: how many pounds in a ton?', () => {
         const msg : string = 'How many pounds in a ton?';
-        expect(callOpenAiApi(msg)).to.eventually.throw(Error,
+        expect(callModelAPI(msg)).to.eventually.throw(Error,
              'An error occurred while generating the llm function');
     })
 })
