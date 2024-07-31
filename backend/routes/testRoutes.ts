@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createTestTable, insertTestData, queryTestData, updateTestData, deleteTestData, dropTestTable, registerAttempt, getAttemptsByUserAndQuestion} from '../controllers/testController';
+import { createTestTable, insertTestData, queryTestData, updateTestData, deleteTestData, dropTestTable, registerAttempt, getAttemptsByUserAndQuestion, deleteMockUser } from '../controllers/testController';
 
 const router = Router();
 
@@ -20,5 +20,7 @@ router.delete('/drop-test-table', dropTestTable);
 router.post('/attempts', registerAttempt);
 //Get attempt by user and question
 router.get('/attempts/user/:userID/question/:questionID', getAttemptsByUserAndQuestion);
+// Delete Mock user
+router.delete('/delete-mock-users', deleteMockUser);
 
 export default router;

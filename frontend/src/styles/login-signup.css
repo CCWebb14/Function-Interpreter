@@ -92,3 +92,11 @@
     overflow-y: scroll;
     max-height: 80vh;
 }
+
+.error-field.error {
+    color: red;
+}
+
+.error-field.success {
+    color: green;
+}

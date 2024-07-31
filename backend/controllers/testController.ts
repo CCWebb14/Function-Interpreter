@@ -50,6 +50,7 @@ export const deleteTestData = async (req: Request, res: Response, next: NextFunc
     }
 };
 
+
 export const dropTestTable = async (req: Request, res: Response, next: NextFunction) => {
     try {
         await db.schema.dropTable('test_table');
@@ -148,5 +149,23 @@ export const getAttemptsByUserAndQuestion = async (req: Request, res: Response) 
         res.status(200).json({ success: true, data: attempts });
     } catch (error: any) {
         res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+//Delete mock user
+export const deleteMockUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // Delete user with username 'mockuser1'
+        await db('users').where({ username: 'mockuser1' }).del();
+
+        // Delete user with username 'mockuser2'
+        await db('users').where({ username: 'mockuser2' }).del();
+
+        // Delete attempts where userID is 1
+        await db('attempts').where({ userID: 1 }).del();
+
+        return res.status(200).json({ success: true, message: 'Mock users deleted successfully.' });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Error deleting users.' });
     }
 };

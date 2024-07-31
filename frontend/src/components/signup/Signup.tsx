@@ -27,7 +27,8 @@ export default function Signup() {
     const [firstName, setFirstName] = useState('tmp');
     const [lastName, setLastName] = useState('tmp');
     const [email, setEmail] = useState('');
-    const [message, setMessage] = useState(''); // Define the message state
+    const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState('');
     const [consent, setConsent] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [hasOpenedModal, setHasOpenedModal] = useState(false);
@@ -54,21 +55,25 @@ export default function Signup() {
 
         if (!username) {
             setMessage('Username is required.');
+            setMessageType('error');
             return;
         }
 
         if (!password) {
             setMessage('Password is required.');
+            setMessageType('error');
             return;
         }
 
         if (!consent) {
             setMessage('Please read our T&C.');
+            setMessageType('error');
             return;
         }
 
         if (!validateEmail(email)) {
             setMessage('Please enter a valid email address.');
+            setMessageType('error');
             return;
         }
 
@@ -77,9 +82,12 @@ export default function Signup() {
         try {
             await axios.post('http://localhost:4001/api/users/register', formData);
             setMessage('You have successfully registered!');
+            setMessageType('success');
 
             setTimeout(() => {
                 setMessage('Redirecting to login page...');
+                setMessageType('success');
+
 
                 // Wait for another 2 seconds before redirecting
                 setTimeout(() => {
@@ -92,13 +100,17 @@ export default function Signup() {
             if (axios.isAxiosError(err)) {
                 if (err.response && err.response.status === 400) {
                     setMessage('Username already taken');
+                    setMessageType('error');
                 } else if (err.response && err.response.status === 401) {
                     setMessage('Email already taken');
+                    setMessageType('error');
                 } else {
                     setMessage('Error creating user');
+                    setMessageType('error');
                 }
             } else {
                 setMessage('An unexpected error occurred');
+                setMessageType('error');
             }
         }
     };
@@ -165,7 +177,7 @@ export default function Signup() {
                         <div className='need-account'>Have an account?</div>
                         <div className='join-now' onClick={handleNav}>Login here</div>
                     </div>
-                    <div className='error-field'>{message}</div>
+                    <div className={`error-field ${messageType}`}>{message}</div>
                 </div>
             </div>
         </div >
