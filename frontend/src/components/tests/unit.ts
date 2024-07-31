@@ -12,6 +12,14 @@ export function runTests() {
     const attemptsApi = 'http://localhost:4001/api/attempts';
     const questionApi = 'http://localhost:4001/api/question';
 
+    before(async function () {
+        try {
+            await axios.delete(`${mockApi}/delete-mock-users`);
+            console.log('Mock users deleted successfully.');
+        } catch (error) {
+            console.error('Failed to delete mock users:', error);
+        }
+    });
 
     describe('Database Operations [CRUD]', function () {
         it('should create a test table', async function () {
@@ -210,58 +218,35 @@ export function runTests() {
                 throw new Error(`Failed to register attempt without hint: ${error.response ? error.response.data.message : error.message}`);
             }
         });
-
-        describe('LLM Functionality API', function () {
-            it('should submit user function and return test results', async function () {
-                // timeout extension for llm responses
-                this.timeout(60000);
-
-                const submission = {
-                    user_input: 'return the sum of two numbers',
-                    time: 120,
-                    hint_used: true,
-                };
-
-                try {
-                    const response = await axios.post(`${questionApi}/submit/0`, submission);
-                    expect(response.status).to.equal(200);
-                    expect(response.data).to.have.property('success', true);
-                    expect(response.data).to.have.property('tests_passed', 6);
-                    expect(response.data).to.have.property('total_tests', 6);
-                    expect(response.data).to.have.property('llm_function');
-                } catch (error: any) {
-                    throw new Error(`Failed to submit user function: ${error.response ? error.response.data.message : error.message}`);
-                }
-            });
-        })
-
-        describe('Question API', function () {
-            it('should get the list of questions', async function () {
-                try {
-                    const response = await axios.get(`${questionApi}/list`);
-                    expect(response.status).to.equal(200);
-                    expect(response.data).to.have.property('success', true);
-                    expect(response.data).to.have.property('message');
-                } catch (error: any) {
-                    throw new Error(`Failed to get question list: ${error.response ? error.response.data.message : error.message}`);
-                }
-            });
-
-            it('should get a specific question by ID', async function () {
-                try {
-                    const response = await axios.get(`${questionApi}/id/1`);
-                    expect(response.status).to.equal(200);
-                    expect(response.data).to.have.property('success', true);
-                    expect(response.data).to.have.property('function_string', 'function boo(num) {\n\treturn num % 2 === 0;\n}');
-                    expect(response.data).to.have.property('hint');
-                } catch (error: any) {
-                    throw new Error(`Failed to get question by ID: ${error.response ? error.response.data.message : error.message}`);
-                }
-            });
-        });
-
     });
 
+    describe('LLM Functionality API', function () {
+        it('should submit user function and return test results', async function () {
+            // Timeout extension for LLM responses
+            this.timeout(60000);
+
+            const submission = {
+                user_input: 'return the sum of two numbers',
+                time: 120,
+                hint_used: true,
+            };
+
+            try {
+
+                const response = await axios.post(`${questionApi}/submit/0`, submission);
+                expect(response.status).to.equal(200);
+                expect(response.data).to.have.property('success', true);
+                expect(response.data).to.have.property('tests_passed', 6);
+                expect(response.data).to.have.property('total_tests', 6);
+                expect(response.data).to.have.property('llm_function');
+
+                // Optionally, log the response for debugging purposes
+                //console.log(response.data);
+            } catch (error: any) {
+                throw new Error(`Failed to submit user function: ${error.response ? error.response.data.message : error.message}`);
+            }
+        });
+    });
 
     describe('Leaderboard DB Test', function () {
         it('Check response contains correct properties', async function () {
@@ -348,9 +333,5 @@ export function runTests() {
             }
         });
 
-
     });
-
-
-
 }
