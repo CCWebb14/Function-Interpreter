@@ -276,7 +276,6 @@ export function runTests() {
                 let prev = Infinity
                 let isAsc = true
                 for (const { totalScore } of result) {
-                    // console.log(totalScore, ' <= ', prev)
                     if (totalScore > prev) {
                         isAsc = false
                     }

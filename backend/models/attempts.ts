@@ -3,9 +3,7 @@ import top_ten_query from './top_ten_query';
 
 export const getTopScores = async (): Promise<any[]> => {
     try {
-        // this query takes the top score for each user on each 
-        // question, sums them, and returns total
-        
+        // retrieves top 10 scores and returns
         const aggregatedScores = await db.raw(top_ten_query());
         return aggregatedScores;
     } catch (error) {

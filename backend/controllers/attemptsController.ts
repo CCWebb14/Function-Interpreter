@@ -2,10 +2,10 @@ import { Request, Response } from 'express';
 import { getTopScores } from '../models/attempts';
 
 export const getTop10Scores = async (req: Request, res: Response) => {
-
+    // check user is authenticated
     if (req.isAuthenticated()) {
         try {
-
+            // returns top 10 scores as map
             const result = await getTopScores();
             // Return a success message
             return res.status(201).json({ success: true, message: result });
