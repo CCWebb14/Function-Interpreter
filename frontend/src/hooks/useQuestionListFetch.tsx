@@ -32,7 +32,6 @@ export const useQuestionListFetch = (path : string) => {
         try {
             setLoading(true);
             const res : response = await axios.get(path)
-            console.log(res.data.message)
 
             setState(() => ({   
                 results : res.data.message

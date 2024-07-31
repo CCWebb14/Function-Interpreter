@@ -26,15 +26,12 @@ export const configurePassport = () => {
     ));
 
     passport.serializeUser((user: any, done) => {
-        console.log('Serializing user:', user);
         done(null, user.userID);
     });
 
     passport.deserializeUser(async (id: number, done) => {
-        console.log('Deserializing user ID:', id);
         try {
             const user = await findUserById(id);
-            console.log('User found:', user);
             done(null, user);
         } catch (err) {
             done(err, null);
