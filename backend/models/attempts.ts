@@ -7,7 +7,6 @@ export const getTopScores = async (): Promise<any[]> => {
         // question, sums them, and returns total
         
         const aggregatedScores = await db.raw(top_ten_query());
-        console.log('query: ', aggregatedScores)
         return aggregatedScores;
     } catch (error) {
         console.error('Error fetching top scores:', error);

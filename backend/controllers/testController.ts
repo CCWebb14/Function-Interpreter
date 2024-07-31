@@ -133,7 +133,6 @@ export const registerAttempt = async (req: Request, res: Response) => {
         const result = await registerAttemptModel(req.body);
         res.status(201).json(result);
     } catch (error: any) {
-        console.error('Error registering attempt:', error); // Add this line
         res.status(500).json({ success: false, message: error.message });
     }
 };
