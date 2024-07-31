@@ -9,6 +9,11 @@ UPDATE sqlite_sequence SET seq = 0 WHERE name = 'attempts';
 INSERT INTO users (username, password, firstName, lastName, email) VALUES ('unittestuser', 'password123', 'unit', 'test', 'unittestuser@example.com');
 
 
+--DELETE mock user
+DELETE FROM users WHERE username = 'mockuser1';
+DELETE FROM users WHERE username = 'mockuser2';
+
+
 -- Create user table if it doesn't exist
 CREATE TABLE users (
     userID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,8 +24,8 @@ CREATE TABLE users (
     email TEXT NOT NULL UNIQUE
 );
 
--- Attempts  table
-CREATE TABLE IF NOT EXISTS attempts (
+--Attempts table
+CREATE TABLE attempts (
     attemptID INTEGER PRIMARY KEY AUTOINCREMENT,
     userID INTEGER NOT NULL,
     questionID INTEGER NOT NULL,
