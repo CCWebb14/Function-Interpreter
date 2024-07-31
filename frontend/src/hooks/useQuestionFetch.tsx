@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// good to have an initial state to reset
+// Initial state before fetching
 const initialState = {
 	function_string: '',
     hint: ''
 };
 
+// Interface for state type definitions
 interface StateType {
     function_string: string;
     hint: string;
 }
 
+// Type definitions for expected json response from api
 type Response = {
     status: number,
     data: {
@@ -21,11 +23,10 @@ type Response = {
     }
 }
 
+// React hook to fetch data specified based off of passed question id
 export const useQuestionFetch = (id: number | undefined) => {
-	// initial state as false
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(false); 
 	const [error, setError] = useState(false);
-    // add initial state from above
     const [questionFetchState, setQuestionFetchState] = useState<StateType>(initialState);
 
     const FetchQuestion = async () => {
@@ -49,6 +50,7 @@ export const useQuestionFetch = (id: number | undefined) => {
     }
 
     // Use only on mount or when id changes, [] is a dependancy array, ie: when do we want it to trigger
+    // re-render when id changes, allows user to progress to next question
 	useEffect(() => {
 		setQuestionFetchState(initialState);
 		FetchQuestion();
