@@ -1,8 +1,7 @@
 import { useProfileFetch } from '../../hooks/useProfileFetch';
 import '../../styles/dashboard.css'
 
-
-
+// Display User Statistics 
 export default function Dashboard() {
     const { profileFetchState } = useProfileFetch();
 

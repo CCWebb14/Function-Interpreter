@@ -27,6 +27,7 @@ type response = {
     }
 }
 
+//Fetches User Statistics from backend
 export const useProfileFetch = () => {
     // initial state as false 
 	const [loading, setLoading] = useState(false);
