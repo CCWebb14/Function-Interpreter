@@ -1,12 +1,14 @@
 
 import { Function_Suite_Map, Function_Test, Function_Suite } from "./function_suite";
 
+// Type definition for test_results
 export type test_results = {
     tests_passed: number;
     total_tests: number;
     cases: test_case[];
 }
 
+// Type definition for a single test case result
 type test_case = {
     testID: number; 
     input : any;
@@ -15,6 +17,7 @@ type test_case = {
     pass : boolean
 };
 
+// Initial state for a single test case
 const initialState: test_case = {
     testID: 0,
     input: "",
@@ -23,12 +26,16 @@ const initialState: test_case = {
     pass: false,
 };
 
+// Function that handles the testing the llm generated function against a test suite
+// Returns the number of tests_passed, total_tests in the suite and an array of each test case
 export const test_function = (llm_gen_function: Function, id: number): test_results => {
     let tests_passed: number = 0;
     let test_suite: Function_Suite = Function_Suite_Map[id];
     let cases: test_case[] = [];
 
 
+    // Loop that iterates through each test in the suite and executes the test
+    // Pushes test case to the cases array
     for (let i = 0; i < test_suite.test_count; i++) {
         const current_test: Function_Test = test_suite.tests[i];
         let cur_case: test_case= {...initialState};

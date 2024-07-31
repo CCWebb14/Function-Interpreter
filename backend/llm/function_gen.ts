@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Type definitions for expected json response from llm api
 type SuccessfulResponse = {
   model: string;
   created_at: string;
@@ -15,9 +16,15 @@ type SuccessfulResponse = {
   eval_duration: number
 };
 
-async function callOpenAiApi(user_input: string): Promise<string> {
+
+// Function that handles the api post request to an llm
+async function callModelAPI(user_input: string): Promise<string> {
+  // Endpoint for ollama's generate 
   const url: string = 'http://ollama:11434/api/generate';
 
+  // Control flow for submitting an api message to the model
+  // Always prompts the model with a system message.
+  // This message prompts the model to expect a plain english interpretation of a function and to return a javascript block.
   try {
     const response = await axios.post<SuccessfulResponse>(url, {
       model: 'llama3',
@@ -40,6 +47,8 @@ async function callOpenAiApi(user_input: string): Promise<string> {
   }
 }
 
+// Function that parses for markdown blocks and returns the content
+// Utilizes regex to detect both (```javascript{content}```) and (```{content}```) blocks
 function parseMarkdown(api_output: string): string {
   const js_pattern = /```javascript([\s\S]+?)```/
   const js_match = api_output.match(js_pattern);
@@ -58,6 +67,9 @@ function parseMarkdown(api_output: string): string {
   throw new Error('No markdown block found');
 }
 
+// Function that extracts the function name from a string
+// Ex: "function foo(...)" returns "foo"
+// Throws error when "javascript {function_name}(" is not found
 function extractFunctionName(function_code: string): string {
   const function_pattern = /function (\w+)\s*\(/;
   const function_name = function_code.match(function_pattern);
@@ -69,8 +81,9 @@ function extractFunctionName(function_code: string): string {
   }
 }
 
+// Generates an executable JavaScript Function from a string utilizing a llm
 async function llmFunctionGeneration(user_input: string): Promise<Function> {
-  const api_output = await callOpenAiApi(user_input);
+  const api_output = await callModelAPI(user_input);
   const js_code_block = parseMarkdown(api_output);
   const function_name = extractFunctionName(js_code_block);
   const function_input = `
@@ -78,8 +91,7 @@ async function llmFunctionGeneration(user_input: string): Promise<Function> {
       return ${function_name};
       `;
 
-  // May want to run later in a vm due to security concerns
   return new Function(function_input)();
 }
 
-export { callOpenAiApi, parseMarkdown, extractFunctionName, llmFunctionGeneration }
+export { callModelAPI, parseMarkdown, extractFunctionName, llmFunctionGeneration }
