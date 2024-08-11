@@ -1,46 +1,73 @@
 import axios from 'axios';
+import { configDotenv } from 'dotenv';
+
+configDotenv();
 
 // Type definitions for expected json response from llm api
-type SuccessfulResponse = {
-  model: string;
-  created_at: string;
-  response: string;
-  done: boolean;
-  done_reason: string;
-  context: number[];
-  total_duration: number,
-  load_duration: number,
-  prompt_eval_count: number,
-  prompt_eval_duration: number,
-  eval_count: number,
-  eval_duration: number
-};
+type Choice = {
+    index: number;
+    message: {
+      role: string;
+      content: string;
+    };
+    logprobs: null | Record<string, unknown>;
+    finish_reason: string;
+  };
+  
+  type Usage = {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+  
+  type SuccessfulResponse = {
+    id: string;
+    object: string;
+    created: number;
+    model: string;
+    choices: Choice[];
+    usage: Usage;
+    system_fingerprint: string;
+  };
 
 
 // Function that handles the api post request to an llm
 async function callModelAPI(user_input: string): Promise<string> {
+  // Import API_KEY from .env file
+  const api_key: string = process.env.API_KEY
+  console.log(api_key);
   // Endpoint for ollama's generate 
-  const url: string = 'http://ollama:11434/api/generate';
+  const url: string = 'https://api.openai.com/v1/chat/completions';
 
   // Control flow for submitting an api message to the model
   // Always prompts the model with a system message.
   // This message prompts the model to expect a plain english interpretation of a function and to return a javascript block.
   try {
     const response = await axios.post<SuccessfulResponse>(url, {
-      model: 'llama3',
-      stream: false,
-      system: 'Your job is to take a plain english interpretation of a function and return a single javascript block.',
-      prompt: user_input
+      model: 'gpt-4o',
+      messages: [
+        {
+          role: 'system',
+          content: `Your job is to take a plain english interpretation of a function and return a single javascript block.`
+        },
+        {
+          role: 'user',
+          content: user_input
+        }
+      ],
+      temperature: 0.7
     }, {
       headers: {
-        'Content-Type': 'application/json'
-      },
-      timeout: 60000
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${api_key}`
+      }
     });
-    return response.data.response;
+
+    const data: SuccessfulResponse = response.data;
+    return data.choices[0].message.content;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error('Failed to call ollama API');
+      throw new Error('Failed to call OpenAI API');
     } else {
       throw new Error('An unexpected error occurred');
     }
