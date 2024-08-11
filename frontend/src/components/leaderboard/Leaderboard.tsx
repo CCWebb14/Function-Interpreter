@@ -1,10 +1,11 @@
 import '../../styles/login-signup.css'
 import '../../styles/leaderboard.css'
 import { useQuestionListFetch } from '../../hooks/useQuestionListFetch';
+import config from '../../../config'
 
 export default function Leaderboard() {
     // utilizes api endpoint to get top 10
-    const { state } = useQuestionListFetch('http://localhost:4001/api/attempts/top-ten');
+    const { state } = useQuestionListFetch(config.baseURL + '/api/attempts/top-ten');
 
     return (
         <div className='box-container-leaderboard'>

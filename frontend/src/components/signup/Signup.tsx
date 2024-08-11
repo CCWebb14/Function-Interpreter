@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom';
 import { checkAuth } from '../../../util/auth';
+import config from '../../../config'
 
 export default function Signup() {
 
@@ -80,7 +81,7 @@ export default function Signup() {
         const formData = { username, password, firstName, lastName, email }
 
         try {
-            await axios.post('http://localhost:4001/api/users/register', formData);
+            await axios.post(config.baseURL + '/api/users/register', formData);
             setMessage('You have successfully registered!');
             setMessageType('success');
 

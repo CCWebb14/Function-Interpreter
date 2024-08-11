@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import config from '../../config'
 
 
 // good to have an initial state to reset 
@@ -38,7 +39,7 @@ export const useProfileFetch = () => {
     const FetchProfile = async () => {
         try { 
             setLoading(true); 
-            const res : response = await axios.get('http://localhost:4001/api/users/dashboard')
+            const res : response = await axios.get(config.baseURL + '/api/users/dashboard')
             setProfileFetchState(() => ({
                 userName: res.data.userName,
                 totalTime: res.data.totalTime, 

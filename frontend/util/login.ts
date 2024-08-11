@@ -1,8 +1,9 @@
 import axios from 'axios';
+import config from '../config'
 
 export const login = async (username: string, password: string): Promise<boolean> => {
     try {
-        const response = await axios.post('http://localhost:4001/api/users/login', {
+        const response = await axios.post(config.baseURL + '/api/users/login', {
             username,
             password,
         }, {

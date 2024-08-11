@@ -5,13 +5,14 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { QuestionButton } from './Question_Button';
 import { useNavigate } from 'react-router-dom';
+import config from '../../../config'
 
 
 // React component for displaying the question menu page
 // Dynamically renders a list of questions present on the backend
 export default function Question_Menu() {
     // Fetch the backend question list
-    const { state } = useQuestionListFetch('http://localhost:4001/api/question/list');
+    const { state } = useQuestionListFetch(config.baseURL + '/api/question/list');
     const navigate = useNavigate();
 
     // Helper function to route the user to the question page based off of the button id

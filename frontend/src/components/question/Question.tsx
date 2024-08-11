@@ -15,6 +15,7 @@ import NavButton from '../navigation/NavButton';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box';
+import config from '../../../config'
 
 // Initial state before submitting answer
 const initialState = {
@@ -126,7 +127,7 @@ export default function Question() {
 
         try {
             setSubmissionLoading(true);
-            const axios_response: response = await axios.post(`http://localhost:4001/api/question/submit/${stateID}`, {
+            const axios_response: response = await axios.post(config.baseURL + `/api/question/submit/${stateID}`, {
                 user_input, 
                 time,
                 hint_used

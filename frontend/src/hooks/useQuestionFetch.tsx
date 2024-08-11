@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import config from '../../config'
 
 // Initial state before fetching
 const initialState = {
@@ -32,7 +33,7 @@ export const useQuestionFetch = (id: number | undefined) => {
     const FetchQuestion = async () => {
         try {
             setLoading(true);
-            const res : Response = await axios.get(`http://localhost:4001/api/question/id/${id}`)
+            const res : Response = await axios.get(config.baseURL + `/api/question/id/${id}`)
 
             if (res.status >= 400) {
                 setError(true);

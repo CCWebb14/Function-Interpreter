@@ -1,14 +1,15 @@
 import { expect } from 'chai';
 import axios from 'axios';
+import config from '../../../config'
 
 // Define the test suite
 export function runTests() {
 
     // API Endpoints
-    const mockApi = 'http://localhost:4001/api/test';
-    const userApi = 'http://localhost:4001/api/users';
-    const attemptsApi = 'http://localhost:4001/api/attempts';
-    const questionApi = 'http://localhost:4001/api/question';
+    const mockApi = config.baseURL + '/api/test';
+    const userApi = config.baseURL + '/api/users';
+    const attemptsApi = config.baseURL + '/api/attempts';
+    const questionApi = config.baseURL + '/api/question';
 
     after(async function () {
         try {

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../styles/login-signup.css';
 import TextField from '@mui/material/TextField';
+import config from '../../../config'
 
 export default function Login() {
 
@@ -27,7 +28,7 @@ export default function Login() {
     const handleSubmit = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:4001/api/users/login', {
+            const response = await axios.post(config.baseURL + '/api/users/login', {
                 username,
                 password,
             }, {
