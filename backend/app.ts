@@ -10,16 +10,20 @@ import session from 'express-session';
 import { ConnectSessionKnexStore } from "connect-session-knex";
 import db from './models/db';
 import attemptsRoutes from './routes/attemptsRoutes';
+import { configDotenv } from 'dotenv';
+
+configDotenv();
 
 //Express setup
 const app = express();
 const port = process.env.PORT || 4001;
+const frontend_url: string = process.env.FRONTEND_URL;
 
 //Middlewares
 app.use(bodyParser.json());
-//Lack security: app.use(cors());
+
 app.use(cors({
-    origin: 'http://localhost:4000', // Replace with your frontend's URL
+    origin: frontend_url, // Replace with your frontend's URL
     credentials: true //required for cookie passing
 }));
 
